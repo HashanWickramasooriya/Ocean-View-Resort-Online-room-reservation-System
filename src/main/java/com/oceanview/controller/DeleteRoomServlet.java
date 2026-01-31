@@ -4,25 +4,38 @@ import com.oceanview.dao.RoomDAO;
 import com.oceanview.dao.RoomDAOImpl;
 import com.oceanview.database.DBConnection;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+
+import java.io.IOException;
 import java.sql.Connection;
 
-@WebServlet("/DeleteRoomServlet")
+@WebServlet("/admin/delete-room")
 public class DeleteRoomServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws java.io.IOException {
+    private RoomDAO dao;
 
-        int id = Integer.parseInt(request.getParameter("id"));
+    @Override
+    public void init() throws ServletException {
+        try {
+            Connection conn = DBConnection.getConnection();
+            dao = new RoomDAOImpl(conn);
+        } catch (Exception e) {
+            throw new ServletException("DB Init Failed", e);
+        }
+    }
 
-        try (Connection con = DBConnection.getConnection()) {
-            RoomDAO dao = new RoomDAOImpl(con);
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        try {
+            int id = Integer.parseInt(req.getParameter("id"));
             dao.deleteRoom(id);
+            resp.sendRedirect("manageRooms.jsp");
         } catch (Exception e) {
             e.printStackTrace();
+            resp.sendRedirect("manageRooms.jsp?error=Delete Failed");
         }
-
-        response.sendRedirect("admin/rooms.jsp");
     }
 }

@@ -4,6 +4,7 @@ import com.oceanview.dao.RoomDAO;
 import com.oceanview.dao.RoomDAOImpl;
 import com.oceanview.database.DBConnection;
 import com.oceanview.entity.Room;
+import com.oceanview.entity.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -15,29 +16,28 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/admin/add-room")
+@WebServlet("/admin/update-room")
 @MultipartConfig
-public class AddRoomServlet extends HttpServlet {
+public class UpdateRoomServlet extends HttpServlet {
 
     private RoomDAO dao;
 
-    @Override
     public void init() throws ServletException {
         try {
-            Connection conn = DBConnection.getConnection();
-            dao = new RoomDAOImpl(conn);
+            dao = new RoomDAOImpl(DBConnection.getConnection());
         } catch (Exception e) {
-            throw new ServletException("DB Init Failed", e);
+            throw new ServletException(e);
         }
     }
 
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
 
         try {
+            int roomId = Integer.parseInt(req.getParameter("roomId"));
+
             Room room = new Room();
-            room.setRoomNumber(req.getParameter("roomNumber"));
+            room.setRoomId(roomId);
             room.setRoomName(req.getParameter("roomName"));
             room.setRoomType(req.getParameter("roomType"));
             room.setRatePerNight(Double.parseDouble(req.getParameter("rate")));
@@ -45,10 +45,11 @@ public class AddRoomServlet extends HttpServlet {
             room.setChildCapacity(Integer.parseInt(req.getParameter("childCapacity")));
             room.setDescription(req.getParameter("description"));
             room.setFacilities(req.getParameter("facilities"));
+            room.setStatus(req.getParameter("status"));
 
-            int roomId = dao.addRoom(room);
+            dao.updateRoom(room);
 
-            // 🔥 ABSOLUTE PATH TO YOUR PROJECT FOLDER
+            // Upload new images
             String uploadPath = "C:/Ocean_View_Resort/src/main/webapp/uploads/rooms";
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdirs();
@@ -61,18 +62,17 @@ public class AddRoomServlet extends HttpServlet {
                     String fileName = System.currentTimeMillis() + "_" + part.getSubmittedFileName();
                     part.write(uploadPath + File.separator + fileName);
 
-                    // Save RELATIVE path in DB
                     images.add("uploads/rooms/" + fileName);
                 }
             }
 
-            dao.addRoomImages(roomId, images);
+            if (!images.isEmpty()) dao.addRoomImages(roomId, images);
 
             resp.sendRedirect("manageRooms.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendRedirect("addRoom.jsp?error=Upload Failed");
+            resp.sendRedirect("editRoom.jsp?id=" + req.getParameter("roomId") + "&error=Failed");
         }
     }
 }

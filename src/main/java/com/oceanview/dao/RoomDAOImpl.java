@@ -2,135 +2,128 @@ package com.oceanview.dao;
 
 import com.oceanview.entity.Room;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class RoomDAOImpl implements RoomDAO {
 
     private Connection conn;
+    public RoomDAOImpl(Connection conn) { this.conn = conn; }
 
-    public RoomDAOImpl(Connection conn) {
-        this.conn = conn;
-    }
-
-    // ================= ADD ROOM =================
     @Override
-    public boolean addRoom(Room room) {
-        String sql = "INSERT INTO rooms " +
-                "(room_number, room_name, room_type, rate_per_night, capacity, description, facilities, images, status) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+    public int addRoom(Room room) {
+        String sql = "INSERT INTO rooms(room_number,room_name,room_type,rate_per_night,adult_capacity,child_capacity,description,facilities,status) VALUES(?,?,?,?,?,?,?,?,?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, room.getRoomNumber());
             ps.setString(2, room.getRoomName());
             ps.setString(3, room.getRoomType());
             ps.setDouble(4, room.getRatePerNight());
-            ps.setInt(5, room.getCapacity());
-            ps.setString(6, room.getDescription());
-            ps.setString(7, room.getFacilities());
-            ps.setString(8, room.getImages());
-            ps.setString(9, room.getStatus());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+            ps.setInt(5, room.getAdultCapacity());
+            ps.setInt(6, room.getChildCapacity());
+            ps.setString(7, room.getDescription());
+            ps.setString(8, room.getFacilities());
+            ps.setString(9, "AVAILABLE");
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) { e.printStackTrace(); }
+        return 0;
     }
 
-    // ================= GET ALL ROOMS =================
+    @Override
+    public void addRoomImages(int roomId, List<String> images) {
+        String sql = "INSERT INTO room_images(room_id,image_path) VALUES(?,?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (String img : images) {
+                ps.setInt(1, roomId);
+                ps.setString(2, img);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
     @Override
     public List<Room> getAllRooms() {
-        List<Room> rooms = new ArrayList<>();
-        String sql = "SELECT * FROM rooms ORDER BY created_at DESC";
-        try (PreparedStatement ps = conn.prepareStatement(sql);
+        List<Room> list = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM rooms");
              ResultSet rs = ps.executeQuery()) {
-
             while (rs.next()) {
-                Room room = new Room();
-                room.setRoomId(rs.getInt("room_id"));
-                room.setRoomNumber(rs.getString("room_number"));
-                room.setRoomName(rs.getString("room_name"));
-                room.setRoomType(rs.getString("room_type"));
-                room.setRatePerNight(rs.getDouble("rate_per_night"));
-                room.setCapacity(rs.getInt("capacity"));
-                room.setDescription(rs.getString("description"));
-                room.setFacilities(rs.getString("facilities"));
-                room.setImages(rs.getString("images"));
-                room.setStatus(rs.getString("status"));
-                room.setCreatedAt(rs.getTimestamp("created_at"));
-                room.setUpdatedAt(rs.getTimestamp("updated_at"));
-                rooms.add(room);
+                Room r = new Room();
+                r.setRoomId(rs.getInt("room_id"));
+                r.setRoomNumber(rs.getString("room_number"));
+                r.setRoomName(rs.getString("room_name"));
+                r.setRoomType(rs.getString("room_type"));
+                r.setRatePerNight(rs.getDouble("rate_per_night"));
+                r.setAdultCapacity(rs.getInt("adult_capacity"));
+                r.setChildCapacity(rs.getInt("child_capacity"));
+                r.setDescription(rs.getString("description"));
+                r.setFacilities(rs.getString("facilities"));
+                r.setStatus(rs.getString("status"));
+                list.add(r);
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return rooms;
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
     }
 
-    // ================= GET ROOM BY ID =================
     @Override
     public Room getRoomById(int id) {
-        Room room = null;
-        String sql = "SELECT * FROM rooms WHERE room_id=?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM rooms WHERE room_id=?")) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                room = new Room();
-                room.setRoomId(rs.getInt("room_id"));
-                room.setRoomNumber(rs.getString("room_number"));
-                room.setRoomName(rs.getString("room_name"));
-                room.setRoomType(rs.getString("room_type"));
-                room.setRatePerNight(rs.getDouble("rate_per_night"));
-                room.setCapacity(rs.getInt("capacity"));
-                room.setDescription(rs.getString("description"));
-                room.setFacilities(rs.getString("facilities"));
-                room.setImages(rs.getString("images"));
-                room.setStatus(rs.getString("status"));
-                room.setCreatedAt(rs.getTimestamp("created_at"));
-                room.setUpdatedAt(rs.getTimestamp("updated_at"));
+                Room r = new Room();
+                r.setRoomId(id);
+                r.setRoomNumber(rs.getString("room_number"));
+                r.setRoomName(rs.getString("room_name"));
+                r.setRoomType(rs.getString("room_type"));
+                r.setRatePerNight(rs.getDouble("rate_per_night"));
+                r.setAdultCapacity(rs.getInt("adult_capacity"));
+                r.setChildCapacity(rs.getInt("child_capacity"));
+                r.setDescription(rs.getString("description"));
+                r.setFacilities(rs.getString("facilities"));
+                r.setStatus(rs.getString("status"));
+                return r;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return room;
+        } catch (Exception e) { e.printStackTrace(); }
+        return null;
     }
 
-    // ================= UPDATE ROOM =================
     @Override
-    public boolean updateRoom(Room room) {
-        String sql = "UPDATE rooms SET " +
-                "room_number=?, room_name=?, room_type=?, rate_per_night=?, capacity=?, " +
-                "description=?, facilities=?, images=?, status=?, updated_at=NOW() " +
-                "WHERE room_id=?";
+    public boolean updateRoom(Room r) {
+        String sql = "UPDATE rooms SET room_name=?,room_type=?,rate_per_night=?,adult_capacity=?,child_capacity=?,description=?,facilities=?,status=? WHERE room_id=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, room.getRoomNumber());
-            ps.setString(2, room.getRoomName());
-            ps.setString(3, room.getRoomType());
-            ps.setDouble(4, room.getRatePerNight());
-            ps.setInt(5, room.getCapacity());
-            ps.setString(6, room.getDescription());
-            ps.setString(7, room.getFacilities());
-            ps.setString(8, room.getImages());
-            ps.setString(9, room.getStatus());
-            ps.setInt(10, room.getRoomId());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            ps.setString(1, r.getRoomName());
+            ps.setString(2, r.getRoomType());
+            ps.setDouble(3, r.getRatePerNight());
+            ps.setInt(4, r.getAdultCapacity());
+            ps.setInt(5, r.getChildCapacity());
+            ps.setString(6, r.getDescription());
+            ps.setString(7, r.getFacilities());
+            ps.setString(8, r.getStatus());
+            ps.setInt(9, r.getRoomId());
+            return ps.executeUpdate() == 1;
+        } catch (Exception e) { e.printStackTrace(); }
         return false;
     }
 
-    // ================= DELETE ROOM =================
     @Override
     public boolean deleteRoom(int id) {
-        String sql = "DELETE FROM rooms WHERE room_id=?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM rooms WHERE room_id=?")) {
             ps.setInt(1, id);
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            return ps.executeUpdate() == 1;
+        } catch (Exception e) { e.printStackTrace(); }
         return false;
+    }
+
+    @Override
+    public List<String> getRoomImages(int roomId) {
+        List<String> imgs = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement("SELECT image_path FROM room_images WHERE room_id=?")) {
+            ps.setInt(1, roomId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) imgs.add(rs.getString(1));
+        } catch (Exception e) { e.printStackTrace(); }
+        return imgs;
     }
 }
