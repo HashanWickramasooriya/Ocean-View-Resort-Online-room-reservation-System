@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*,com.oceanview.entity.Room,com.oceanview.dao.*,com.oceanview.database.DBConnection"%>
+<%@ page import="java.util.*,com.oceanview.entity.*,com.oceanview.dao.*,com.oceanview.database.DBConnection"%>
 
 <%
 int id = Integer.parseInt(request.getParameter("id"));
-RoomDAO dao = new RoomDAOImpl(DBConnection.getConnection());
-Room room = dao.getRoomById(id);
-List<String> images = dao.getRoomImages(id);
+RoomDAO roomDao = new RoomDAOImpl(DBConnection.getConnection());
+RoomImageDAO imgDao = new RoomImageDAOImpl(DBConnection.getConnection());
+
+Room room = roomDao.getRoomById(id);
+List<RoomImage> images = imgDao.getImagesByRoomId(id);
 %>
 
 <!DOCTYPE html>
@@ -14,11 +16,17 @@ List<String> images = dao.getRoomImages(id);
 <meta charset="UTF-8">
 <title>Edit Room</title>
 <style>
-img{width:120px;height:90px;margin:5px;object-fit:cover;}
+body{font-family:Arial;background:#f2f5f9;padding:20px;}
+.container{background:white;padding:20px;border-radius:10px;max-width:700px;margin:auto;}
+img{width:120px;height:90px;margin:5px;object-fit:cover;border-radius:6px;border:1px solid #ccc;}
+.image-box{display:inline-block;text-align:center;margin:5px;}
+.delete-link{color:red;font-size:12px;text-decoration:none;}
+button{padding:10px 15px;background:#0059b3;color:white;border:none;border-radius:6px;}
 </style>
 </head>
 <body>
 
+<div class="container">
 <h2>Edit Room</h2>
 
 <form action="<%=request.getContextPath()%>/admin/update-room"
@@ -55,8 +63,14 @@ Status:
 </select><br><br>
 
 <h3>Current Images</h3>
-<% for(String img : images){ %>
-<img src="<%=request.getContextPath()%>/<%=img%>">
+
+<% for(RoomImage img : images){ %>
+<div class="image-box">
+    <img src="<%=request.getContextPath()%>/<%=img.getImagePath()%>"><br>
+    <a class="delete-link"
+       href="<%=request.getContextPath()%>/admin/delete-room-image?imageId=<%=img.getImageId()%>&roomId=<%=room.getRoomId()%>"
+       onclick="return confirm('Delete this image?')">Delete</a>
+</div>
 <% } %>
 
 <br><br>
@@ -64,6 +78,7 @@ Add More Images: <input type="file" name="images" multiple><br><br>
 
 <button type="submit">Update Room</button>
 </form>
+</div>
 
 </body>
 </html>

@@ -4,7 +4,6 @@ import com.oceanview.dao.RoomDAO;
 import com.oceanview.dao.RoomDAOImpl;
 import com.oceanview.database.DBConnection;
 import com.oceanview.entity.Room;
-import com.oceanview.entity.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -22,20 +21,24 @@ public class UpdateRoomServlet extends HttpServlet {
 
     private RoomDAO dao;
 
+    @Override
     public void init() throws ServletException {
         try {
-            dao = new RoomDAOImpl(DBConnection.getConnection());
+            Connection conn = DBConnection.getConnection();
+            dao = new RoomDAOImpl(conn);
         } catch (Exception e) {
-            throw new ServletException(e);
+            throw new ServletException("DB Init Failed", e);
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
 
         try {
             int roomId = Integer.parseInt(req.getParameter("roomId"));
 
+            // ===== UPDATE ROOM DETAILS =====
             Room room = new Room();
             room.setRoomId(roomId);
             room.setRoomName(req.getParameter("roomName"));
@@ -49,11 +52,18 @@ public class UpdateRoomServlet extends HttpServlet {
 
             dao.updateRoom(room);
 
-            // Upload new images
-            String uploadPath = "C:/Ocean_View_Resort/src/main/webapp/uploads/rooms";
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) uploadDir.mkdirs();
+            // ===== CORRECT RUNTIME UPLOAD PATH =====
+            String appPath = req.getServletContext().getRealPath("");
+            String uploadPath = appPath + File.separator + "uploads" + File.separator + "rooms";
 
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            System.out.println("UPLOAD PATH = " + uploadPath);
+
+            // ===== SAVE NEW IMAGES =====
             List<String> images = new ArrayList<>();
 
             for (Part part : req.getParts()) {
@@ -66,7 +76,9 @@ public class UpdateRoomServlet extends HttpServlet {
                 }
             }
 
-            if (!images.isEmpty()) dao.addRoomImages(roomId, images);
+            if (!images.isEmpty()) {
+                dao.addRoomImages(roomId, images);
+            }
 
             resp.sendRedirect("manageRooms.jsp");
 

@@ -26,8 +26,7 @@ public class LoginServlet extends HttpServlet {
             Connection conn = DBConnection.getConnection();
             userDAO = new UserDAOImpl(conn);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServletException("Database connection initialization failed", e);
+            throw new ServletException("DB Init Failed", e);
         }
     }
 
@@ -40,10 +39,10 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        
+        // HARD-CODED ADMIN (optional)
         if ("admin".equals(username) && "admin123".equals(password)) {
             User admin = new User();
-            admin.setUserId(0); 
+            admin.setUserId(0);
             admin.setUsername("admin");
             admin.setFullName("Administrator");
             admin.setRole("ADMIN");
@@ -54,17 +53,16 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        
         try {
             User user = userDAO.login(username, password);
 
             if (user != null) {
-                session.setAttribute("user", user); 
+                session.setAttribute("user", user);
 
-                
                 if ("ADMIN".equals(user.getRole())) {
                     response.sendRedirect(request.getContextPath() + "/admin/admindashboard.jsp");
                 } else {
+                    // ✅ FIXED LOWERCASE PATH
                     response.sendRedirect(request.getContextPath() + "/staff/dashboard.jsp");
                 }
 
@@ -75,7 +73,7 @@ public class LoginServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Something went wrong! Please try again.");
+            request.setAttribute("error", "Something went wrong!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }

@@ -36,6 +36,7 @@ public class AddRoomServlet extends HttpServlet {
             throws IOException, ServletException {
 
         try {
+            // ===== SAVE ROOM DETAILS =====
             Room room = new Room();
             room.setRoomNumber(req.getParameter("roomNumber"));
             room.setRoomName(req.getParameter("roomName"));
@@ -48,11 +49,18 @@ public class AddRoomServlet extends HttpServlet {
 
             int roomId = dao.addRoom(room);
 
-            // 🔥 ABSOLUTE PATH TO YOUR PROJECT FOLDER
-            String uploadPath = "C:/Ocean_View_Resort/src/main/webapp/uploads/rooms";
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) uploadDir.mkdirs();
+            // ===== CORRECT RUNTIME UPLOAD PATH =====
+            String appPath = req.getServletContext().getRealPath("");
+            String uploadPath = appPath + File.separator + "uploads" + File.separator + "rooms";
 
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            System.out.println("UPLOAD PATH = " + uploadPath);
+
+            // ===== SAVE IMAGES =====
             List<String> images = new ArrayList<>();
 
             for (Part part : req.getParts()) {
@@ -61,7 +69,7 @@ public class AddRoomServlet extends HttpServlet {
                     String fileName = System.currentTimeMillis() + "_" + part.getSubmittedFileName();
                     part.write(uploadPath + File.separator + fileName);
 
-                    // Save RELATIVE path in DB
+                    // Path stored in DB (used in JSP)
                     images.add("uploads/rooms/" + fileName);
                 }
             }
