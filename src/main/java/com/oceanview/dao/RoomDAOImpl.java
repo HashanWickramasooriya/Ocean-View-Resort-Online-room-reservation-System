@@ -126,4 +126,53 @@ public class RoomDAOImpl implements RoomDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return imgs;
     }
+    
+ // Add these methods to RoomDAOImpl.java
+
+    public List<Room> getRoomsByType(String roomType) {
+        List<Room> list = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT * FROM rooms WHERE room_type = ? AND status = 'AVAILABLE'")) {
+            ps.setString(1, roomType);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(mapRoom(rs));
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
+    }
+
+    public Map<String, Object> getRoomWithImages(int roomId) {
+        Map<String, Object> roomData = new HashMap<>();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT * FROM rooms WHERE room_id = ?")) {
+            ps.setInt(1, roomId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Room room = mapRoom(rs);
+                roomData.put("room", room);
+                
+                // Get images
+                List<String> images = getRoomImages(roomId);
+                roomData.put("images", images);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return roomData;
+    }
+    
+    private Room mapRoom(ResultSet rs) throws SQLException {
+        Room r = new Room();
+        r.setRoomId(rs.getInt("room_id"));
+        r.setRoomNumber(rs.getString("room_number"));
+        r.setRoomName(rs.getString("room_name"));
+        r.setRoomType(rs.getString("room_type"));
+        r.setRatePerNight(rs.getDouble("rate_per_night"));
+        r.setAdultCapacity(rs.getInt("adult_capacity"));
+        r.setChildCapacity(rs.getInt("child_capacity"));
+        r.setDescription(rs.getString("description"));
+        r.setFacilities(rs.getString("facilities"));
+        r.setStatus(rs.getString("status"));
+        return r;
+    }
 }
+
