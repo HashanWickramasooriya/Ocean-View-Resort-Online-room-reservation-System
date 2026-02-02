@@ -1,5 +1,8 @@
 package com.oceanview.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Room {
 
     private int roomId;
@@ -12,6 +15,9 @@ public class Room {
     private String description;
     private String facilities;
     private String status;
+
+    // ✅ Add images list
+    private List<String> images = new ArrayList<>();
 
     public int getRoomId() { return roomId; }
     public void setRoomId(int roomId) { this.roomId = roomId; }
@@ -42,4 +48,7 @@ public class Room {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public List<String> getImages() { return images; }
+    public void setImages(List<String> images) { this.images = images; }
 }

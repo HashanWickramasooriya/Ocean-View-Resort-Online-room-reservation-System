@@ -10,7 +10,9 @@ public class DBConnection {
             "jdbc:mysql://localhost:3306/ocean_view_resort"
             + "?useSSL=false"
             + "&allowPublicKeyRetrieval=true"
-            + "&serverTimezone=UTC";
+            + "&serverTimezone=UTC"
+            + "&useUnicode=true"
+            + "&characterEncoding=UTF-8";
 
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "12345";

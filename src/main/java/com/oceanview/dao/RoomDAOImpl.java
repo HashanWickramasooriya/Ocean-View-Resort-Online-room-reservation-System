@@ -68,10 +68,16 @@ public class RoomDAOImpl implements RoomDAO {
 
     @Override
     public Room getRoomById(int id) {
-        try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM rooms WHERE room_id=?")) {
+
+        String sql = "SELECT * FROM rooms WHERE room_id=?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
+
                 Room r = new Room();
                 r.setRoomId(id);
                 r.setRoomNumber(rs.getString("room_number"));
@@ -83,11 +89,20 @@ public class RoomDAOImpl implements RoomDAO {
                 r.setDescription(rs.getString("description"));
                 r.setFacilities(rs.getString("facilities"));
                 r.setStatus(rs.getString("status"));
+
+                
+                r.setImages(getRoomImages(id));
+
                 return r;
             }
-        } catch (Exception e) { e.printStackTrace(); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
+
 
     @Override
     public boolean updateRoom(Room r) {

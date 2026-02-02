@@ -1,5 +1,6 @@
 package com.oceanview.controller;
 
+import com.google.gson.Gson;
 import com.oceanview.dao.BookingCalendarDAO;
 import com.oceanview.dao.BookingCalendarDAOImpl;
 import com.oceanview.database.DBConnection;
@@ -17,12 +18,12 @@ public class BookedDatesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int roomId = Integer.parseInt(req.getParameter("roomId"));
 
+        resp.setContentType("application/json; charset=UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+
         try (Connection conn = DBConnection.getConnection()) {
             BookingCalendarDAO calDAO = new BookingCalendarDAOImpl(conn);
             List<String> dates = calDAO.getBookedDates(roomId);
-
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
 
             StringBuilder sb = new StringBuilder();
             sb.append("[");
@@ -31,11 +32,13 @@ public class BookedDatesServlet extends HttpServlet {
                 if (i < dates.size() - 1) sb.append(",");
             }
             sb.append("]");
+
             resp.getWriter().write(sb.toString());
 
         } catch (Exception e) {
             e.printStackTrace();
             resp.setStatus(500);
+            resp.getWriter().write("[]");
         }
     }
 }
