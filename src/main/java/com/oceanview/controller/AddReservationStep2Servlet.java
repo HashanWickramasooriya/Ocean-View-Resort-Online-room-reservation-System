@@ -57,16 +57,16 @@ public class AddReservationStep2Servlet extends HttpServlet {
             g.setDateOfBirth(java.sql.Date.valueOf(dob));
         }
 
-        // Basic required validation
+        // -------- BASIC VALIDATION --------
         if (g.getGuestName() == null || g.getGuestName().trim().isEmpty()
                 || g.getAddress() == null || g.getAddress().trim().isEmpty()
-                || g.getContactNumber() == null || g.getContactNumber().trim().isEmpty()) {
+                || g.getContactNumber() == null || g.getContactNumber().trim().isEmpty()
+                || g.getEmail() == null || g.getEmail().trim().isEmpty()) {
 
             resp.sendRedirect(req.getContextPath() + "/staff/addReservationStep2.jsp?error=Please fill required guest details");
             return;
         }
 
-        // ---------------- TRANSACTION PART ----------------
         Connection conn = null;
         int guestId;
 
@@ -78,22 +78,31 @@ public class AddReservationStep2Servlet extends HttpServlet {
             ReservationDAO resDAO = new ReservationDAOImpl(conn);
             BookingCalendarDAO calDAO = new BookingCalendarDAOImpl(conn);
 
-            // Re-check availability
+            // ✅ re-check availability
             if (!resDAO.isRoomAvailable(roomId, checkIn, checkOut)) {
                 conn.rollback();
                 resp.sendRedirect(req.getContextPath() + "/staff/addReservationStep1.jsp?error=Room became unavailable");
                 return;
             }
 
-            // Create guest
-            guestId = guestDAO.createGuest(g);
+            // ✅ find existing guest by contact+email
+            guestId = guestDAO.getGuestIdByContactAndEmail(g.getContactNumber(), g.getEmail());
+
+            // ✅ if not found, create new
             if (guestId == 0) {
-                conn.rollback();
-                resp.sendRedirect(req.getContextPath() + "/staff/addReservationStep2.jsp?error=Guest create failed");
-                return;
+                guestId = guestDAO.createGuest(g);
+                if (guestId == 0) {
+                    conn.rollback();
+                    resp.sendRedirect(req.getContextPath() + "/staff/addReservationStep2.jsp?error=Guest create failed");
+                    return;
+                }
+            } else {
+                // ✅ optional: update existing guest details (recommended)
+                g.setGuestId(guestId);
+                guestDAO.updateGuest(g);
             }
 
-            // Create reservation
+            // ✅ create reservation
             Reservation r = new Reservation();
             r.setReservationId(reservationId);
             r.setGuestId(guestId);
@@ -113,7 +122,7 @@ public class AddReservationStep2Servlet extends HttpServlet {
                 return;
             }
 
-            // Mark calendar dates
+            // ✅ calendar mark booked
             if (!calDAO.markBookedDates(roomId, reservationId, checkIn, checkOut)) {
                 conn.rollback();
                 resp.sendRedirect(req.getContextPath() + "/staff/addReservationStep2.jsp?error=Calendar booking failed");
@@ -127,16 +136,12 @@ public class AddReservationStep2Servlet extends HttpServlet {
             try { if (conn != null) conn.rollback(); } catch (Exception ignore) {}
             resp.sendRedirect(req.getContextPath() + "/staff/addReservationStep2.jsp?error=Failed");
             return;
+
         } finally {
-            try {
-                if (conn != null) {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                }
-            } catch (Exception ignore) {}
+            try { if (conn != null) conn.close(); } catch (Exception ignore) {}
         }
 
-        // ---------------- AFTER COMMIT: GET ROOM + SEND EMAIL ----------------
+        // -------- AFTER COMMIT: GET ROOM + SEND EMAIL --------
         Room room = null;
         try (Connection conn2 = DBConnection.getConnection()) {
             RoomDAO roomDAO = new RoomDAOImpl(conn2);
@@ -145,10 +150,9 @@ public class AddReservationStep2Servlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // Send nice HTML email (never break booking)
+        // Email should NOT break booking
         try {
-            if (g.getEmail() != null && !g.getEmail().trim().isEmpty() && room != null) {
-
+            if (room != null) {
                 String subject = "Ocean View Resort - Booking Confirmed (" + reservationId + ")";
 
                 String html =
@@ -187,7 +191,7 @@ public class AddReservationStep2Servlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // ---------------- CLEAR STEP SESSION ----------------
+        // -------- CLEAR STEP SESSION --------
         session.removeAttribute("step_reservationId");
         session.removeAttribute("step_roomId");
         session.removeAttribute("step_checkIn");
@@ -200,7 +204,6 @@ public class AddReservationStep2Servlet extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + "/staff/manageReservations.jsp");
     }
 
-    // Small safe helper to avoid HTML breaking if guest name contains special chars
     private static String escapeHtml(String s) {
         if (s == null) return "";
         return s.replace("&", "&amp;")
