@@ -1,22 +1,23 @@
 package com.oceanview.dao;
 
 import com.oceanview.entity.Reservation;
+import com.oceanview.entity.ReservationDetails;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 public class ReservationDAOImpl implements ReservationDAO {
 
     private final Connection conn;
-    public ReservationDAOImpl(Connection conn) { this.conn = conn; }
+
+    public ReservationDAOImpl(Connection conn) {
+        this.conn = conn;
+    }
 
     @Override
     public String generateReservationId() {
@@ -24,21 +25,27 @@ public class ReservationDAOImpl implements ReservationDAO {
         String prefix = "RES-" + today + "-";
 
         String sql = "SELECT reservation_id FROM reservations WHERE reservation_id LIKE ? ORDER BY reservation_id DESC LIMIT 1";
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, prefix + "%");
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
-                String last = rs.getString(1);
+                String last = rs.getString(1); // RES-20260201-005
                 int lastSeq = Integer.parseInt(last.substring(last.length() - 3));
                 return prefix + String.format("%03d", lastSeq + 1);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return prefix + "001";
     }
 
     @Override
     public boolean isRoomAvailable(int roomId, String checkIn, String checkOut) {
+
         String sql = """
             SELECT COUNT(*)
             FROM booking_calendar
@@ -54,16 +61,22 @@ public class ReservationDAOImpl implements ReservationDAO {
             ps.setDate(3, java.sql.Date.valueOf(checkOut));
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt(1) == 0;
-        } catch (Exception e) { e.printStackTrace(); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return false;
     }
 
     @Override
     public boolean createReservation(Reservation r) {
+
         String sql = """
-            INSERT INTO reservations(reservation_id,guest_id,room_id,check_in_date,check_out_date,
-            number_of_guests,special_requests,status,total_amount,advance_payment,created_by)
+            INSERT INTO reservations(
+                reservation_id, guest_id, room_id, check_in_date, check_out_date,
+                number_of_guests, special_requests, status, total_amount, advance_payment, created_by
+            )
             VALUES(?,?,?,?,?,?,?,?,?,?,?)
         """;
 
@@ -79,15 +92,19 @@ public class ReservationDAOImpl implements ReservationDAO {
             ps.setDouble(9, r.getTotalAmount());
             ps.setDouble(10, r.getAdvancePayment());
             ps.setInt(11, r.getCreatedBy());
+
             return ps.executeUpdate() == 1;
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return false;
     }
 
     @Override
     public List<Reservation> getAllReservations() {
+
         List<Reservation> list = new ArrayList<>();
         String sql = "SELECT * FROM reservations ORDER BY created_at DESC";
 
@@ -111,13 +128,16 @@ public class ReservationDAOImpl implements ReservationDAO {
                 list.add(r);
             }
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return list;
     }
 
     @Override
     public Reservation getReservationById(String reservationId) {
+
         String sql = "SELECT * FROM reservations WHERE reservation_id=?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -141,16 +161,20 @@ public class ReservationDAOImpl implements ReservationDAO {
                 return r;
             }
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
 
     @Override
     public boolean updateReservation(Reservation r) {
+
         String sql = """
             UPDATE reservations
-            SET check_in_date=?, check_out_date=?, number_of_guests=?, special_requests=?, status=?, total_amount=?, advance_payment=?
+            SET check_in_date=?, check_out_date=?, number_of_guests=?, special_requests=?,
+                status=?, total_amount=?, advance_payment=?
             WHERE reservation_id=?
         """;
 
@@ -163,22 +187,171 @@ public class ReservationDAOImpl implements ReservationDAO {
             ps.setDouble(6, r.getTotalAmount());
             ps.setDouble(7, r.getAdvancePayment());
             ps.setString(8, r.getReservationId());
+
             return ps.executeUpdate() == 1;
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return false;
     }
 
     @Override
     public boolean cancelReservation(String reservationId) {
+
         String sql = "UPDATE reservations SET status='CANCELLED' WHERE reservation_id=?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, reservationId);
             return ps.executeUpdate() == 1;
-        } catch (Exception e) { e.printStackTrace(); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return false;
+    }
+
+    // ✅ FULL DETAILS (JOIN)
+    @Override
+    public List<ReservationDetails> getAllReservationDetails() {
+
+        List<ReservationDetails> list = new ArrayList<>();
+
+        String sql = """
+            SELECT r.*,
+                   g.guest_name, g.contact_number, g.email, g.address,
+                   rm.room_number, rm.room_type, rm.rate_per_night
+            FROM reservations r
+            JOIN guests g ON r.guest_id = g.guest_id
+            JOIN rooms rm ON r.room_id = rm.room_id
+            ORDER BY r.created_at DESC
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(mapDetails(rs));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    @Override
+    public ReservationDetails getReservationDetailsById(String reservationId) {
+
+        String sql = """
+            SELECT r.*,
+                   g.guest_name, g.contact_number, g.email, g.address,
+                   rm.room_number, rm.room_type, rm.rate_per_night
+            FROM reservations r
+            JOIN guests g ON r.guest_id = g.guest_id
+            JOIN rooms rm ON r.room_id = rm.room_id
+            WHERE r.reservation_id=?
+            LIMIT 1
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, reservationId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) return mapDetails(rs);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    // ✅ SEARCH + FILTER
+    @Override
+    public List<ReservationDetails> searchReservations(String q, String status, String fromDate, String toDate) {
+
+        List<ReservationDetails> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("""
+            SELECT r.*,
+                   g.guest_name, g.contact_number, g.email, g.address,
+                   rm.room_number, rm.room_type, rm.rate_per_night
+            FROM reservations r
+            JOIN guests g ON r.guest_id = g.guest_id
+            JOIN rooms rm ON r.room_id = rm.room_id
+            WHERE 1=1
+        """);
+
+        List<Object> params = new ArrayList<>();
+
+        if (q != null && !q.trim().isEmpty()) {
+            sql.append(" AND (r.reservation_id LIKE ? OR g.guest_name LIKE ? OR g.contact_number LIKE ? OR rm.room_number LIKE ?)");
+            String like = "%" + q.trim() + "%";
+            params.add(like); params.add(like); params.add(like); params.add(like);
+        }
+
+        if (status != null && !status.trim().isEmpty() && !"ALL".equalsIgnoreCase(status)) {
+            sql.append(" AND r.status=?");
+            params.add(status.trim());
+        }
+
+        // overlap filter
+        if (fromDate != null && !fromDate.trim().isEmpty() && toDate != null && !toDate.trim().isEmpty()) {
+            sql.append(" AND r.check_in_date < ? AND r.check_out_date > ?");
+            params.add(java.sql.Date.valueOf(toDate));
+            params.add(java.sql.Date.valueOf(fromDate));
+        }
+
+        sql.append(" ORDER BY r.created_at DESC");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                Object p = params.get(i);
+                if (p instanceof java.sql.Date) ps.setDate(i + 1, (java.sql.Date) p);
+                else ps.setString(i + 1, String.valueOf(p));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(mapDetails(rs));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    // ✅ mapper for ReservationDetails
+    private ReservationDetails mapDetails(ResultSet rs) throws Exception {
+        ReservationDetails d = new ReservationDetails();
+
+        d.setReservationId(rs.getString("reservation_id"));
+        d.setGuestId(rs.getInt("guest_id"));
+        d.setRoomId(rs.getInt("room_id"));
+
+        d.setGuestName(rs.getString("guest_name"));
+        d.setGuestContact(rs.getString("contact_number"));
+        d.setGuestEmail(rs.getString("email"));
+        d.setGuestAddress(rs.getString("address"));
+
+        d.setRoomNumber(rs.getString("room_number"));
+        d.setRoomType(rs.getString("room_type"));
+        d.setRatePerNight(rs.getDouble("rate_per_night"));
+
+        d.setCheckInDate(rs.getDate("check_in_date"));
+        d.setCheckOutDate(rs.getDate("check_out_date"));
+        d.setNumberOfGuests(rs.getInt("number_of_guests"));
+        d.setSpecialRequests(rs.getString("special_requests"));
+        d.setStatus(rs.getString("status"));
+        d.setTotalAmount(rs.getDouble("total_amount"));
+        d.setAdvancePayment(rs.getDouble("advance_payment"));
+        d.setCreatedAt(rs.getTimestamp("created_at"));
+
+        return d;
     }
 }

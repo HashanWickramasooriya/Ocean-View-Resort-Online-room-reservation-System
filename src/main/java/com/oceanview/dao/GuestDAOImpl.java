@@ -1,13 +1,18 @@
 package com.oceanview.dao;
 
 import com.oceanview.entity.Guest;
+
 import java.sql.*;
 
 public class GuestDAOImpl implements GuestDAO {
 
     private final Connection conn;
-    public GuestDAOImpl(Connection conn) { this.conn = conn; }
 
+    public GuestDAOImpl(Connection conn) {
+        this.conn = conn;
+    }
+
+    // ---------------- CREATE GUEST ----------------
     @Override
     public int createGuest(Guest g) {
 
@@ -24,77 +29,34 @@ public class GuestDAOImpl implements GuestDAO {
             ps.setString(6, g.getIdNumber());
             ps.setString(7, g.getNationality());
 
-            if (g.getDateOfBirth() != null) {
+            if (g.getDateOfBirth() != null)
                 ps.setDate(8, g.getDateOfBirth());
-            } else {
+            else
                 ps.setNull(8, Types.DATE);
-            }
 
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) return rs.getInt(1);
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return 0;
     }
 
-    @Override
-    public int getGuestIdByContactAndEmail(String contact, String email) {
-        if (contact == null || contact.trim().isEmpty()) return 0;
-        if (email == null || email.trim().isEmpty()) return 0;
-
-        String sql = "SELECT guest_id FROM guests WHERE contact_number=? AND email=? LIMIT 1";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, contact.trim());
-            ps.setString(2, email.trim());
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt("guest_id");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    @Override
-    public boolean updateGuest(Guest g) {
-        String sql = "UPDATE guests SET guest_name=?, address=?, id_type=?, id_number=?, nationality=?, date_of_birth=? " +
-                     "WHERE guest_id=?";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, g.getGuestName());
-            ps.setString(2, g.getAddress());
-            ps.setString(3, g.getIdType());
-            ps.setString(4, g.getIdNumber());
-            ps.setString(5, g.getNationality());
-
-            if (g.getDateOfBirth() != null) {
-                ps.setDate(6, g.getDateOfBirth());
-            } else {
-                ps.setNull(6, Types.DATE);
-            }
-
-            ps.setInt(7, g.getGuestId());
-
-            return ps.executeUpdate() == 1;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
+    // ---------------- GET GUEST BY ID ----------------
     @Override
     public Guest getGuestById(int guestId) {
+
         String sql = "SELECT * FROM guests WHERE guest_id=?";
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, guestId);
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 Guest g = new Guest();
                 g.setGuestId(rs.getInt("guest_id"));
@@ -108,9 +70,71 @@ public class GuestDAOImpl implements GuestDAO {
                 g.setDateOfBirth(rs.getDate("date_of_birth"));
                 return g;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return null;
+    }
+
+    // ---------------- GET GUEST ID BY CONTACT + EMAIL ----------------
+    @Override
+    public int getGuestIdByContactAndEmail(String contact, String email) {
+
+        String sql = "SELECT guest_id FROM guests WHERE contact_number=? AND email=? LIMIT 1";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, contact);
+            ps.setString(2, email);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt("guest_id");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    // ---------------- UPDATE GUEST ----------------
+    @Override
+    public boolean updateGuest(Guest g) {
+
+        String sql = """
+            UPDATE guests
+            SET guest_name=?,
+                address=?,
+                nationality=?,
+                id_type=?,
+                id_number=?,
+                date_of_birth=?
+            WHERE guest_id=?
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, g.getGuestName());
+            ps.setString(2, g.getAddress());
+            ps.setString(3, g.getNationality());
+            ps.setString(4, g.getIdType());
+            ps.setString(5, g.getIdNumber());
+
+            if (g.getDateOfBirth() != null)
+                ps.setDate(6, g.getDateOfBirth());
+            else
+                ps.setNull(6, Types.DATE);
+
+            ps.setInt(7, g.getGuestId());
+
+            return ps.executeUpdate() == 1;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
