@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-
-
 <%@ page isELIgnored="false"%>
 <!DOCTYPE html>
 <html>
@@ -29,11 +26,13 @@ button{width:100%; padding:10px; background:#007BFF; color:white; border:none; c
     <p class="error"><%= request.getAttribute("error") %></p>
 <% } %>
 
-<form action="login" method="post">
-<input type="text" name="username" placeholder="Username" required />
-<input type="password" name="password" placeholder="Password" required />
-<button type="submit">Login</button>
+<!-- ✅ IMPORTANT: Use context path -->
+<form action="<%= request.getContextPath() %>/login" method="post">
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button type="submit">Login</button>
 </form>
+
 </div>
 </body>
 </html>

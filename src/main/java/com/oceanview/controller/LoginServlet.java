@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
     private UserDAO userDAO;
 
     @Override
@@ -30,6 +31,14 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/login.jsp").forward(request, response);
+    }
+
+   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -39,7 +48,7 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        // HARD-CODED ADMIN (optional)
+        
         if ("admin".equals(username) && "admin123".equals(password)) {
             User admin = new User();
             admin.setUserId(0);
@@ -59,22 +68,21 @@ public class LoginServlet extends HttpServlet {
             if (user != null) {
                 session.setAttribute("user", user);
 
-                if ("ADMIN".equals(user.getRole())) {
+                if ("ADMIN".equalsIgnoreCase(user.getRole())) {
                     response.sendRedirect(request.getContextPath() + "/admin/admindashboard.jsp");
                 } else {
-                    // ✅ FIXED LOWERCASE PATH
                     response.sendRedirect(request.getContextPath() + "/staff/dashboard.jsp");
                 }
 
             } else {
                 request.setAttribute("error", "Invalid username or password");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                request.getRequestDispatcher("/login.jsp").forward(request, response);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Something went wrong!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
 }
