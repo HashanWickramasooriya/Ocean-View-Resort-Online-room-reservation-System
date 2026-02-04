@@ -272,7 +272,8 @@ public class ReservationDAOImpl implements ReservationDAO {
 
     // ✅ SEARCH + FILTER
     @Override
-    public List<ReservationDetails> searchReservations(String q, String status, String fromDate, String toDate) {
+    public List<ReservationDetails> searchReservations(String q, String status,
+                                                      String fromDate, String toDate) {
 
         List<ReservationDetails> list = new ArrayList<>();
 
@@ -288,22 +289,42 @@ public class ReservationDAOImpl implements ReservationDAO {
 
         List<Object> params = new ArrayList<>();
 
+        // ✅ Search box filter
         if (q != null && !q.trim().isEmpty()) {
-            sql.append(" AND (r.reservation_id LIKE ? OR g.guest_name LIKE ? OR g.contact_number LIKE ? OR rm.room_number LIKE ?)");
+            sql.append("""
+                AND (
+                    r.reservation_id LIKE ?
+                    OR g.guest_name LIKE ?
+                    OR g.contact_number LIKE ?
+                    OR rm.room_number LIKE ?
+                )
+            """);
+
             String like = "%" + q.trim() + "%";
-            params.add(like); params.add(like); params.add(like); params.add(like);
+            params.add(like);
+            params.add(like);
+            params.add(like);
+            params.add(like);
         }
 
-        if (status != null && !status.trim().isEmpty() && !"ALL".equalsIgnoreCase(status)) {
-            sql.append(" AND r.status=?");
+        // ✅ Status filter
+        if (status != null && !status.trim().isEmpty()
+                && !"ALL".equalsIgnoreCase(status)) {
+
+            sql.append(" AND r.status=? ");
             params.add(status.trim());
         }
 
-        // overlap filter
-        if (fromDate != null && !fromDate.trim().isEmpty() && toDate != null && !toDate.trim().isEmpty()) {
-            sql.append(" AND r.check_in_date < ? AND r.check_out_date > ?");
-            params.add(java.sql.Date.valueOf(toDate));
+        // ✅ Date filters (supports from only, to only, or both)
+
+        if (fromDate != null && !fromDate.trim().isEmpty()) {
+            sql.append(" AND r.check_out_date > ? ");
             params.add(java.sql.Date.valueOf(fromDate));
+        }
+
+        if (toDate != null && !toDate.trim().isEmpty()) {
+            sql.append(" AND r.check_in_date < ? ");
+            params.add(java.sql.Date.valueOf(toDate));
         }
 
         sql.append(" ORDER BY r.created_at DESC");
@@ -312,12 +333,18 @@ public class ReservationDAOImpl implements ReservationDAO {
 
             for (int i = 0; i < params.size(); i++) {
                 Object p = params.get(i);
-                if (p instanceof java.sql.Date) ps.setDate(i + 1, (java.sql.Date) p);
-                else ps.setString(i + 1, String.valueOf(p));
+
+                if (p instanceof java.sql.Date) {
+                    ps.setDate(i + 1, (java.sql.Date) p);
+                } else {
+                    ps.setString(i + 1, p.toString());
+                }
             }
 
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) list.add(mapDetails(rs));
+            while (rs.next()) {
+                list.add(mapDetails(rs));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -325,6 +352,7 @@ public class ReservationDAOImpl implements ReservationDAO {
 
         return list;
     }
+
 
     // ✅ mapper for ReservationDetails
     private ReservationDetails mapDetails(ResultSet rs) throws Exception {
