@@ -49,12 +49,15 @@ public class AddUserServlet extends HttpServlet {
         boolean created = userDAO.createUser(user);
 
         if (created) {
-            request.getSession().setAttribute("successMsg", "New staff member added successfully!");
+            HttpSession session = request.getSession();
+            session.setAttribute("message", "New staff member added successfully!");
+            session.setAttribute("messageType", "success");
             response.sendRedirect(request.getContextPath() + "/admin/manageStaff.jsp");
         } else {
             request.setAttribute("message", "Username already exists!");
             request.setAttribute("messageType", "error");
             request.getRequestDispatcher("/admin/addUser.jsp").forward(request, response);
         }
+
     }
 }

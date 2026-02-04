@@ -31,26 +31,26 @@
 
 <style>
 :root{
-  /* ✅ Ocean Breeze palette (NO PINK USED IN UI) */
+ 
   --bg:#E0F2FE;
   --card:#FFFFFF;
-  --primary:#0284C7;      /* Ocean Blue */
+  --primary:#0284C7;      
   --text:#0F172A;
   --muted:#475569;
 
-  /* status colors (optional) */
+ 
   --success:#10B981;
   --warning:#FBBF24;
   --error:#F43F5E;
 
-  /* UI neutrals */
+  
   --panel: rgba(255,255,255,0.92);
   --panel2: rgba(255,255,255,0.98);
   --border: rgba(15,23,42,0.12);
   --shadow: 0 14px 34px rgba(15,23,42,0.12);
   --radius: 22px;
 
-  /* accents */
+  
   --sky:#22c1f0;
 }
 
@@ -66,14 +66,14 @@ body{
   min-height:100vh;
 }
 
-/* Layout */
+
 .layout{
   display:grid;
   grid-template-columns: 280px 1fr;
   min-height:100vh;
 }
 
-/* ✅ SIDEBAR (EXACT SAME AS allReservations.jsp) */
+
 .sidebar{
   padding:22px 18px;
   border-right:1px solid rgba(255,255,255,0.14);
@@ -146,7 +146,7 @@ body{
   padding:14px;
   border-radius:16px;
 
-  /* ✅ Coral Pink Logout */
+  
   background: rgba(251,113,133,0.22);
   border:1px solid rgba(251,113,133,0.45);
   color:#fff;
@@ -159,12 +159,11 @@ body{
   background: rgba(251,113,133,0.35);
   border-color: rgba(251,113,133,0.65);
 }
-/* Main */
+
 .content{
   padding:28px;
 }
 
-/* Header card */
 .header-card{
   padding:18px 22px;
   border-radius:22px;
@@ -184,7 +183,6 @@ body{
   font-weight:700;
 }
 
-/* ✅ MODERN STATS (NO ICONS + LARGE TITLE + DARK BLUE NUMBER) */
 .stats{
   margin-top:28px;
   display:grid;
@@ -211,7 +209,7 @@ body{
   border-color: rgba(2,132,199,0.25);
 }
 
-/* Glow effect */
+
 .stat-tile::before{
   content:"";
   position:absolute;
@@ -223,7 +221,7 @@ body{
   background: radial-gradient(circle, rgba(2,132,199,0.25), transparent 72%);
 }
 
-/* ✅ Large Title */
+
 .stat-tile h4{
   margin:0;
   font-size:20px;
@@ -231,15 +229,15 @@ body{
   color:var(--text);
 }
 
-/* ✅ Big Number */
+
 .stat-tile p{
   margin:18px 0 8px;
   font-size:46px;
   font-weight:950;
-  color:#062a4d; /* Dark Blue */
+  color:#062a4d; 
 }
 
-/* ✅ Middle Subtitle */
+
 .stat-tile .hint{
   margin-top:6px;
   font-size:14px;
@@ -247,7 +245,7 @@ body{
   color:var(--muted);
 }
 
-/* ✅ ACTION SECTION (cards, NO PINK) */
+
 .actions{
   margin-top:40px;
 }
@@ -341,7 +339,7 @@ body{
   font-weight:700;
 }
 
-/* Responsive */
+
 @media (max-width: 1050px){
   .layout{ grid-template-columns: 1fr; }
   .sidebar{ border-right:none; border-bottom:1px solid rgba(15,23,42,0.12); }
@@ -354,7 +352,7 @@ body{
 
 <div class="layout">
 
-  <!-- ✅ Sidebar -->
+  <!--  Sidebar -->
   <aside class="sidebar">
     <div class="brand">
       <div class="logo"></div>
@@ -389,10 +387,10 @@ body{
 
     <div class="header-card">
       <h2>Welcome, <%= user.getFullName() %> 👋</h2>
-      <p>Ocean Breeze Admin Dashboard Overview</p>
+      <p> Admin Dashboard </p>
     </div>
 
-    <!-- ✅ Stats (NO ICONS + LARGE TITLE + DARK BLUE NUMBER + MIDDLE TEXT) -->
+   
     <div class="stats">
 
       <div class="stat-tile">
@@ -421,7 +419,7 @@ body{
 
     </div>
 
-    <!-- ✅ Actions (cards) -->
+    <!--  Actions cards -->
     <div class="actions">
       <div class="actions-head">
         <h3>Quick Management</h3>

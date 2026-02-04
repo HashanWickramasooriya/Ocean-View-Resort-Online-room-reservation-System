@@ -40,9 +40,17 @@ public class UpdateUserServlet extends HttpServlet {
             return;
         }
 
-        // -------- READ FORM --------
-        int userId = Integer.parseInt(request.getParameter("userId"));
+        int userId;
+        try {
+            userId = Integer.parseInt(request.getParameter("userId"));
+        } catch (Exception e) {
+            session.setAttribute("message", "Invalid user ID!");
+            session.setAttribute("messageType", "error");
+            response.sendRedirect(request.getContextPath() + "/admin/manageStaff.jsp");
+            return;
+        }
 
+        // -------- READ FORM --------
         User user = new User();
         user.setUserId(userId);
         user.setFullName(request.getParameter("fullName"));
@@ -53,17 +61,14 @@ public class UpdateUserServlet extends HttpServlet {
 
         boolean updated = userDAO.updateUser(user);
 
-        session.setAttribute("fromUpdate", true);
-
         if (updated) {
-            session.setAttribute("successMsg", "User updated successfully!");
+            session.setAttribute("message", "User updated successfully!");
+            session.setAttribute("messageType", "success");
         } else {
-            session.setAttribute("errorMsg", "Failed to update user!");
+            session.setAttribute("message", "Failed to update user!");
+            session.setAttribute("messageType", "error");
         }
 
-        response.sendRedirect(
-            request.getContextPath() + "/admin/editUser.jsp?id=" + userId
-        );
+        response.sendRedirect(request.getContextPath() + "/admin/editUser.jsp?id=" + userId);
     }
-
 }

@@ -2,7 +2,6 @@ package com.oceanview.controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -37,10 +36,35 @@ public class DeleteUserServlet extends HttpServlet {
             return;
         }
 
-        int userId = Integer.parseInt(request.getParameter("id"));
-        userDAO.deleteUser(userId);
+        String idStr = request.getParameter("id");
+        HttpSession session = request.getSession();
 
-        request.getSession().setAttribute("successMsg", "User deleted successfully!");
+        try {
+            int userId = Integer.parseInt(idStr);
+
+            // ✅ Optional safety: prevent admin deleting themselves
+            if (admin.getUserId() == userId) {
+                session.setAttribute("message", "You cannot delete your own account!");
+                session.setAttribute("messageType", "error");
+                response.sendRedirect(request.getContextPath() + "/admin/manageStaff.jsp");
+                return;
+            }
+
+            boolean deleted = userDAO.deleteUser(userId);
+
+            if (deleted) {
+                session.setAttribute("message", "User deleted permanently!");
+                session.setAttribute("messageType", "success");
+            } else {
+                session.setAttribute("message", "Delete failed! User not found or DB error.");
+                session.setAttribute("messageType", "error");
+            }
+
+        } catch (Exception e) {
+            session.setAttribute("message", "Invalid user ID!");
+            session.setAttribute("messageType", "error");
+        }
+
         response.sendRedirect(request.getContextPath() + "/admin/manageStaff.jsp");
     }
 }

@@ -124,16 +124,14 @@ public class UserDAOImpl implements UserDAO {
     // ---------------- DELETE USER (SOFT) ----------------
     @Override
     public boolean deleteUser(int userId) {
-        boolean result = false;
-        String sql = "UPDATE users SET status='INACTIVE' WHERE user_id=?";
-
+        String sql = "DELETE FROM users WHERE user_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
-            result = ps.executeUpdate() == 1;
-        } catch (SQLException e) {
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return result;
     }
 
     // ---------------- CHECK USERNAME ----------------
