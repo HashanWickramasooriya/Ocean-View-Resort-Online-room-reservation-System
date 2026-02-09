@@ -28,4 +28,14 @@ public interface ReservationDAO {
 
     
     List<ReservationDetails> searchReservations(String q, String status, String fromDate, String toDate);
+
+
+    int countTodayCheckIns();
+    int countTodayCheckOuts();
+    int countPendingReservations();
+    int countAvailableRoomsToday();
+    List<ReservationDetails> getTodaySchedule(int limit);
+    
+    boolean markCheckedIn(String reservationId);
+    boolean markCheckedOut(String reservationId);
 }

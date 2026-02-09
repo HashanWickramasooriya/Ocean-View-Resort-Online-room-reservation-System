@@ -27,6 +27,8 @@ public class ReservationDetails {
     private double totalAmount;
     private double advancePayment;
     private Timestamp createdAt;
+    
+    private String todayType;
 
     public String getReservationId() { return reservationId; }
     public void setReservationId(String reservationId) { this.reservationId = reservationId; }
@@ -81,4 +83,9 @@ public class ReservationDetails {
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    public String getTodayType() { return todayType; }
+    public void setTodayType(String todayType) { this.todayType = todayType; }
+
+
 }

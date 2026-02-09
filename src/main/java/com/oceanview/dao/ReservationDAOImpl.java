@@ -353,6 +353,154 @@ public class ReservationDAOImpl implements ReservationDAO {
         return list;
     }
 
+    @Override
+    public int countTodayCheckIns() {
+        String sql = """
+            SELECT COUNT(*)
+            FROM reservations
+            WHERE check_in_date = CURDATE()
+              AND status IN ('PENDING','CONFIRMED')
+        """;
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * "Today Check-outs" = leaving today; usually CHECKED_IN guests or already CHECKED_OUT today.
+     */
+    @Override
+    public int countTodayCheckOuts() {
+        String sql = """
+            SELECT COUNT(*)
+            FROM reservations
+            WHERE check_out_date = CURDATE()
+              AND status IN ('CHECKED_IN','CHECKED_OUT')
+        """;
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public int countPendingReservations() {
+        String sql = "SELECT COUNT(*) FROM reservations WHERE status='PENDING'";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * Available rooms today:
+     * 1) rooms.status must be AVAILABLE
+     * 2) not BOOKED in booking_calendar today
+     */
+    @Override
+    public int countAvailableRoomsToday() {
+        String sql = """
+            SELECT COUNT(*)
+            FROM rooms rm
+            WHERE rm.status = 'AVAILABLE'
+              AND rm.room_id NOT IN (
+                SELECT DISTINCT room_id
+                FROM booking_calendar
+                WHERE booking_date = CURDATE()
+                  AND status = 'BOOKED'
+              )
+        """;
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            return rs.next() ? rs.getInt(1) : 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * Today schedule list:
+     * - Show check-ins (PENDING/CONFIRMED arriving today)
+     * - Show check-outs (CHECKED_IN/CHECKED_OUT leaving today)
+     */
+    @Override
+    public List<ReservationDetails> getTodaySchedule(int limit) {
+        List<ReservationDetails> list = new ArrayList<>();
+
+        String sql = """
+            SELECT r.*,
+                   g.guest_name, g.contact_number, g.email, g.address,
+                   rm.room_number, rm.room_type, rm.rate_per_night,
+                   CASE
+                     WHEN r.check_in_date = CURDATE() THEN 'CHECK-IN'
+                     WHEN r.check_out_date = CURDATE() THEN 'CHECK-OUT'
+                     ELSE 'TODAY'
+                   END AS today_type
+            FROM reservations r
+            JOIN guests g ON r.guest_id = g.guest_id
+            JOIN rooms rm ON r.room_id = rm.room_id
+            WHERE (
+                   (r.check_in_date = CURDATE() AND r.status IN ('PENDING','CONFIRMED'))
+                OR (r.check_out_date = CURDATE() AND r.status IN ('CHECKED_IN','CHECKED_OUT'))
+            )
+            ORDER BY
+              CASE WHEN r.check_in_date = CURDATE() THEN 0 ELSE 1 END,
+              r.check_in_date ASC,
+              r.created_at DESC
+            LIMIT ?
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ReservationDetails d = mapDetails(rs);
+                d.setTodayType(rs.getString("today_type"));
+                list.add(d);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    
+    
+    @Override
+    public boolean markCheckedIn(String reservationId) {
+        String sql = "UPDATE reservations SET status='CHECKED_IN' WHERE reservation_id=? AND status IN ('PENDING','CONFIRMED')";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, reservationId);
+            return ps.executeUpdate() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean markCheckedOut(String reservationId) {
+        String sql = "UPDATE reservations SET status='CHECKED_OUT' WHERE reservation_id=? AND status='CHECKED_IN'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, reservationId);
+            return ps.executeUpdate() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     // ✅ mapper for ReservationDetails
     private ReservationDetails mapDetails(ResultSet rs) throws Exception {
