@@ -1,8 +1,19 @@
 package com.oceanview.dao;
 
 import com.oceanview.entity.Room;
-import java.sql.*;
-import java.util.*;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class RoomDAOImpl implements RoomDAO {
 
@@ -189,5 +200,55 @@ public class RoomDAOImpl implements RoomDAO {
         r.setStatus(rs.getString("status"));
         return r;
     }
+    
+ // ✅ Staff Room Availability (date range)
+    @Override
+    public List<Room> getAvailableRooms(String checkIn, String checkOut, String roomType) {
+
+        List<Room> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("""
+            SELECT r.*
+            FROM rooms r
+            WHERE r.status='AVAILABLE'
+              AND r.room_id NOT IN (
+                    SELECT bc.room_id
+                    FROM booking_calendar bc
+                    WHERE bc.status='BOOKED'
+                      AND bc.booking_date >= ?
+                      AND bc.booking_date < ?
+              )
+        """);
+
+        List<Object> params = new ArrayList<>();
+        params.add(Date.valueOf(checkIn));
+        params.add(Date.valueOf(checkOut));
+
+        if (roomType != null && !roomType.trim().isEmpty() && !"ALL".equalsIgnoreCase(roomType)) {
+            sql.append(" AND r.room_type=? ");
+            params.add(roomType.trim());
+        }
+
+        sql.append(" ORDER BY r.room_number ");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                Object p = params.get(i);
+                if (p instanceof Date) ps.setDate(i + 1, (Date) p);
+                else ps.setString(i + 1, p.toString());
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapRoom(rs));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 }
 

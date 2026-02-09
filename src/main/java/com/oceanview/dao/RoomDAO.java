@@ -11,4 +11,5 @@ public interface RoomDAO {
     List<Room> getAllRooms();
     void addRoomImages(int roomId, List<String> images);
     List<String> getRoomImages(int roomId);
+    List<Room> getAvailableRooms(String checkIn, String checkOut, String roomType);
 }

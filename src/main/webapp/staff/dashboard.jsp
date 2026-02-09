@@ -104,7 +104,8 @@ header {
 <a href="<%=request.getContextPath()%>/staff/manage-reservations">📋 Manage Reservations</a>
 
     <a href="reservations.jsp">📋 All Reservations</a>
-    <a href="checkAvailability.jsp">🛏 Check Room Availability</a>
+    <a href="<%=request.getContextPath()%>/staff/room-availability">Room Availability</a>
+
     <a href="help.jsp">❓ Help</a>
     <a href="<%=request.getContextPath()%>/logout">🚪 Logout</a>
 </div>
