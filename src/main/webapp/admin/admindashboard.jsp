@@ -28,7 +28,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin Dashboard | Ocean View Resort</title>
-
 <style>
 :root{
  

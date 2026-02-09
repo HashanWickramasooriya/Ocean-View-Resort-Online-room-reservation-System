@@ -11,7 +11,8 @@ List<Room> rooms = dao.getAllRooms();
 <head>
 <meta charset="UTF-8">
 <title>Manage Rooms | Ocean View Resort</title>
-
+<%@ include file="/AllComponents/css/AllCSS.jsp" %>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 :root{
   --bg:#E0F2FE;
@@ -27,14 +28,14 @@ List<Room> rooms = dao.getAllRooms();
   --border: rgba(15,23,42,0.12);
 
   --shadow: 0 14px 34px rgba(15,23,42,0.12);
-  --radius: 20px;
+  --radius: 22px;
 }
 
 *{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Arial;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
   background:
     radial-gradient(900px 600px at 70% 10%, rgba(2,132,199,0.14), transparent 58%),
     radial-gradient(900px 650px at 20% 90%, rgba(16,185,129,0.08), transparent 60%),
@@ -51,7 +52,7 @@ body{
 }
 
 /* ============================= */
-/* ✅ SIDEBAR (LIKE SCREENSHOT)  */
+/* ✅ SIDEBAR (LIKE YOUR DASH)   */
 /* ============================= */
 .sidebar{
   padding:22px 18px;
@@ -94,7 +95,6 @@ body{
   flex-direction:column;
   gap:14px;
 }
-
 .nav a{
   display:flex;
   align-items:center;
@@ -113,18 +113,15 @@ body{
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
   transition: 0.22s ease;
 }
-
 .nav a:hover{
   background: rgba(0,163,217,0.16);
   border-color: rgba(0,163,217,0.30);
   transform: translateY(-1px);
 }
-
 .nav a.active{
   background: rgba(255,255,255,0.12);
   border-color: rgba(255,255,255,0.18);
 }
-
 .nav a .tag{
   padding:6px 12px;
   border-radius:999px;
@@ -135,13 +132,11 @@ body{
   border: 1px solid rgba(255,255,255,0.14);
 }
 
-/* Logout Bottom */
+/* Logout Bottom (ONLY PINK) */
 .sidebar-bottom{
   margin-top:auto;
   padding-top:18px;
 }
-
-/* ✅ ONLY Logout is pink */
 .logout{
   display:block;
   width:100%;
@@ -160,7 +155,6 @@ body{
   box-shadow: 0 16px 40px rgba(0,0,0,0.35);
   transition: 0.22s ease;
 }
-
 .logout:hover{
   background: linear-gradient(135deg, rgba(251,113,133,0.36), rgba(251,113,133,0.18));
   border-color: rgba(251,113,133,0.55);
@@ -168,7 +162,7 @@ body{
 }
 
 /* ============================= */
-/* ✅ MAIN                            */
+/* ✅ MAIN                        */
 /* ============================= */
 .main{
   padding:28px;
@@ -178,7 +172,7 @@ body{
 .topbar{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:flex-start;
   gap:16px;
   padding:18px 22px;
   border-radius:22px;
@@ -192,90 +186,138 @@ body{
   font-size:22px;
   font-weight:950;
 }
-
 .topbar p{
   margin:6px 0 0;
   color:var(--muted);
   font-weight:700;
 }
 
-/* Add Room Button */
+/* Add Staff Button */
 .add-btn{
   padding:12px 18px;
   border-radius:16px;
   background: linear-gradient(135deg, var(--primary), var(--sky));
-  color:white;
-  font-weight:900;
+  color:#fff;
+  font-weight:950;
   text-decoration:none;
-  box-shadow: 0 10px 20px rgba(2,132,199,0.20);
+  box-shadow: 0 12px 26px rgba(2,132,199,0.20);
   white-space:nowrap;
 }
 .add-btn:hover{ filter:brightness(1.05); }
 
-/* Glass Table Card */
+/* ✅ Success/Error message */
+.alert{
+  margin-top:16px;
+  padding:12px 14px;
+  border-radius:16px;
+  font-weight:950;
+  border:1px solid rgba(15,23,42,0.12);
+  background: rgba(255,255,255,0.85);
+}
+.alert.success{
+  border-color: rgba(16,185,129,0.25);
+  background: rgba(16,185,129,0.10);
+  color: rgba(7, 103, 62, 0.95);
+}
+.alert.error{
+  border-color: rgba(244,63,94,0.25);
+  background: rgba(244,63,94,0.10);
+  color: rgba(159, 18, 57, 0.95);
+}
+
+/* Table Card */
 .card{
   margin-top:22px;
   border-radius:22px;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.78);
   backdrop-filter: blur(14px);
   border:1px solid rgba(15,23,42,0.10);
   box-shadow: var(--shadow);
-  overflow:auto;
+  overflow:hidden;
 }
 
 /* Table */
+.table-wrap{
+  overflow:auto;
+}
 table{
   width:100%;
-  border-collapse:collapse;
-  min-width:1000px;
+  border-collapse:separate;
+  border-spacing:0;
+  min-width:1100px;
 }
 
-thead{
-  background: rgba(255,255,255,0.88);
-}
-
-th{
+thead th{
   text-align:left;
   padding:14px;
-  font-size:13px;
+  font-size:12px;
+  letter-spacing:0.5px;
   text-transform:uppercase;
-  letter-spacing:0.4px;
-  color:var(--muted);
+  color: var(--muted);
+  background: rgba(255,255,255,0.90);
+  border-bottom: 1px solid rgba(15,23,42,0.10);
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
-td{
+tbody td{
   padding:14px;
-  border-top:1px solid rgba(15,23,42,0.08);
-  font-weight:700;
+  border-bottom:1px solid rgba(15,23,42,0.08);
+  font-weight:750;
+  background: rgba(255,255,255,0.60);
 }
 
-tr:hover td{
-  background: rgba(2,132,199,0.08);
+tbody tr:hover td{
+  background: rgba(2,132,199,0.10);
 }
 
-/* Action Buttons */
-.btn{
-  padding:8px 14px;
+/* Status pill */
+.pill{
+  display:inline-flex;
+  align-items:center;
+  padding:7px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:950;
+  border:1px solid rgba(15,23,42,0.12);
+  background: rgba(2,132,199,0.10);
+  color: rgba(2, 76, 129, 0.95);
+}
+
+/* Actions */
+.actions a{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 12px;
   border-radius:14px;
-  font-weight:900;
   text-decoration:none;
-  display:inline-block;
-  margin-right:6px;
+  font-weight:950;
+  margin-right:8px;
+  border:1px solid rgba(15,23,42,0.12);
+  background: rgba(255,255,255,0.70);
+  color: var(--text);
+  transition: 0.18s ease;
 }
 
-.edit{
-  background: rgba(2,132,199,0.14);
-  border:1px solid rgba(2,132,199,0.30);
-  color:var(--primary);
+.actions a.edit{
+  border-color: rgba(2,132,199,0.30);
+  background: rgba(2,132,199,0.10);
+  color: var(--primary);
 }
-.edit:hover{ background: rgba(2,132,199,0.25); }
+.actions a.edit:hover{
+  background: rgba(2,132,199,0.16);
+}
 
-.delete{
+.actions a.delete{
+  border-color: rgba(251,113,133,0.40);
+  background: rgba(251,113,133,0.12);
+  color: #b91c1c;
+}
+.actions a.delete:hover{
   background: rgba(251,113,133,0.18);
-  border:1px solid rgba(251,113,133,0.35);
-  color:var(--coral);
 }
-.delete:hover{ background: rgba(251,113,133,0.28); }
 
 /* Responsive */
 @media (max-width: 1050px){
