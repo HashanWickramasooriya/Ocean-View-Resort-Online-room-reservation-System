@@ -323,25 +323,32 @@ body{
     </div>
 
     <nav class="nav">
-      <a href="<%=request.getContextPath()%>/staff/dashboard">
-        <div class="left"><div class="ico">🏠</div>Dashboard</div>
+      <a href="<%=request.getContextPath()%>/staff/dashboard"
+      style="border-color: rgba(34,211,238,0.40); background: rgba(34,211,238,0.10);">
+        <div class="left">Dashboard</div>
         <span class="tag">Home</span>
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp">
-        <div class="left"><div class="ico">➕</div>Add Reservation</div>
+        <div class="left">Add Reservation</div>
         <span class="tag">Create</span>
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/manage-reservations">
-        <div class="left"><div class="ico">📋</div>Manage Reservations</div>
+        <div class="left">Manage Reservations</div>
         <span class="tag">Manage</span>
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/room-availability">
-        <div class="left"><div class="ico">🛏</div>Room Availability</div>
+        <div class="left">Room Availability</div>
         <span class="tag">Check</span>
       </a>
+      
+      <a href="<%=request.getContextPath()%>/staff/help.jsp">
+  <div class="left">Help</div>
+  <span class="tag">Support</span>
+</a>
+      
     </nav>
 
     <div class="sidebar-bottom">
@@ -391,7 +398,7 @@ body{
           <div class="actions">
 
             <a class="action" href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp">
-              <div class="badge">➕</div>
+              
               <div>
                 <h4>Add Reservation</h4>
                 <p>Create a new booking</p>
@@ -399,7 +406,7 @@ body{
             </a>
 
             <a class="action" href="<%=request.getContextPath()%>/staff/manage-reservations">
-              <div class="badge">📋</div>
+              
               <div>
                 <h4>Manage Reservations</h4>
                 <p>Edit / cancel / confirm</p>
@@ -407,7 +414,7 @@ body{
             </a>
 
             <a class="action" href="<%=request.getContextPath()%>/staff/room-availability">
-              <div class="badge">🛏</div>
+             
               <div>
                 <h4>Room Availability</h4>
                 <p>Check free rooms today</p>
@@ -415,7 +422,7 @@ body{
             </a>
 
             <a class="action" href="<%=request.getContextPath()%>/staff/reservations.jsp">
-              <div class="badge">🧾</div>
+              
               <div>
                 <h4>All Reservations</h4>
                 <p>Search booking history</p>
