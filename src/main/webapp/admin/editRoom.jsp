@@ -18,11 +18,27 @@
 <%@ include file="/AllComponents/css/AllCSS.jsp" %>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-/* Full-width */
+
+.logo{
+  width:70px;
+  height:70px;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+}
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
 .span-2{ grid-column: span 2; }
 @media (max-width: 980px){ .span-2{ grid-column: span 1; } }
 
-/* Current images */
 .section-title{
   margin:18px 0 12px;
   font-size:14px;
@@ -84,7 +100,6 @@
   background: rgba(251,113,133,0.18);
 }
 
-/* File input */
 .file-wrap{
   padding:14px;
   border-radius:16px;
@@ -105,11 +120,13 @@
 
 <div class="layout">
 
-  <!-- Sidebar -->
   <aside class="sidebar">
 
     <div class="brand">
-      <div class="logo"></div>
+       <div class="logo">
+    <img src="<%= request.getContextPath() %>/AllComponents/images/Logo_2.png"
+         alt="Ocean View Resort Logo">
+</div>
       <div>
         <h1>Admin Panel</h1>
         <p>Ocean View Resort</p>
@@ -137,7 +154,6 @@
 
   </aside>
 
-  <!-- Main -->
   <main class="main">
 
     <div class="topbar">

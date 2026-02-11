@@ -42,7 +42,6 @@ public class DeleteUserServlet extends HttpServlet {
         try {
             int userId = Integer.parseInt(idStr);
 
-            // ✅ Optional safety: prevent admin deleting themselves
             if (admin.getUserId() == userId) {
                 session.setAttribute("message", "You cannot delete your own account!");
                 session.setAttribute("messageType", "error");

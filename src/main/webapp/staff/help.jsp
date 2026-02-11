@@ -49,7 +49,6 @@ body{
 
 .app{ display:grid; grid-template-columns: 290px 1fr; min-height:100vh; }
 
-/* Sidebar */
 .sidebar{
   padding:22px 18px;
   border-right:1px solid rgba(255,255,255,0.10);
@@ -58,18 +57,21 @@ body{
 }
 .brand{ display:flex; gap:12px; align-items:center; padding:10px 10px 18px; }
 .logo{
-  width:46px;height:46px;border-radius:16px;
-  background: linear-gradient(135deg, var(--a), var(--b));
-  box-shadow: 0 14px 34px rgba(34,211,238,0.15);
-  position:relative;
+  width:70px;
+  height:70px;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
 }
-.logo:after{
-  content:"";
-  position:absolute;
-  inset:10px;
-  border-radius:12px;
-  background: rgba(255,255,255,0.20);
-  transform: rotate(10deg);
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
 }
 .brand h1{ margin:0; font-size:15px; font-weight:950; }
 .brand p{ margin:4px 0 0; font-size:12px; font-weight:700; color:var(--muted); }
@@ -112,7 +114,6 @@ body{
 }
 .logout:hover{ background: rgba(251,113,133,0.28); transform: translateY(-2px); }
 
-/* Main */
 .main{ padding:22px 22px 28px; width:100%; }
 .topbar{
   display:flex;
@@ -207,7 +208,6 @@ li{ margin:6px 0; color: rgba(234,242,255,0.86); line-height:1.6; }
 }
 .btnGhost:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,0.22); }
 
-/* FAQ accordion */
 .faq-item{
   border-radius:18px;
   border:1px solid rgba(255,255,255,0.12);
@@ -253,7 +253,6 @@ li{ margin:6px 0; color: rgba(234,242,255,0.86); line-height:1.6; }
   font-weight:800;
 }
 
-/* Responsive */
 @media (max-width: 980px){
   .app{ grid-template-columns: 1fr; }
   .sidebar{ border-right:none; border-bottom:1px solid rgba(255,255,255,0.10); }
@@ -265,10 +264,12 @@ li{ margin:6px 0; color: rgba(234,242,255,0.86); line-height:1.6; }
 <body>
 <div class="app">
 
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo"></div>
+       <div class="logo">
+    <img src="<%= request.getContextPath() %>/AllComponents/images/Logo_2.png"
+         alt="Ocean View Resort Logo">
+</div>
       <div>
         <h1>Reception Desk</h1>
         <p>Ocean View Resort</p>
@@ -296,7 +297,6 @@ li{ margin:6px 0; color: rgba(234,242,255,0.86); line-height:1.6; }
         <span class="tag">Check</span>
       </a>
 
-      <!-- ACTIVE -->
       <a href="<%=request.getContextPath()%>/staff/help.jsp"
          style="border-color: rgba(34,211,238,0.40); background: rgba(34,211,238,0.10);">
         <div class="left">Help</div>
@@ -309,7 +309,6 @@ li{ margin:6px 0; color: rgba(234,242,255,0.86); line-height:1.6; }
     </div>
   </aside>
 
-  <!-- Main -->
   <main class="main">
 
     <div class="topbar">
@@ -402,7 +401,6 @@ li{ margin:6px 0; color: rgba(234,242,255,0.86); line-height:1.6; }
       </div>
     </div>
 
-    <!-- ✅ UPDATED FAQ QUESTIONS/ANSWERS -->
     <div class="card" style="margin-top:14px;">
       <div class="cardHead">
         <h3>Frequently Asked Questions</h3>
@@ -507,7 +505,6 @@ li{ margin:6px 0; color: rgba(234,242,255,0.86); line-height:1.6; }
 </div>
 
 <script>
-  // FAQ Accordion
   (function(){
     const items = document.querySelectorAll(".faq-item");
     items.forEach(item=>{

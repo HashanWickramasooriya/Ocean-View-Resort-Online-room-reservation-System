@@ -54,27 +54,24 @@ public class UpdateReservationServlet extends HttpServlet {
                 return;
             }
 
-            // If dates changed -> check availability and update calendar
             boolean dateChanged =
                     !old.getCheckInDate().toString().equals(checkIn) ||
                     !old.getCheckOutDate().toString().equals(checkOut);
 
             if (dateChanged) {
-                // remove old dates temporarily
+               
                 calDAO.clearReservationDates(reservationId);
 
-                // check availability for new range
+               
                 if (!resDAO.isRoomAvailable(old.getRoomId(), checkIn, checkOut)) {
                     conn.rollback();
                     resp.sendRedirect(req.getContextPath() + "/staff/editReservation.jsp?id=" + reservationId + "&error=Room not available for new dates");
                     return;
                 }
 
-                // mark new dates
+               
                 calDAO.markBookedDates(old.getRoomId(), reservationId, checkIn, checkOut);
             }
-
-            // recalc total
             double newTotal = PricingUtil.calculateTotal(old.getRatePerNight(), checkIn, checkOut, guests);
 
             Reservation r = new Reservation();

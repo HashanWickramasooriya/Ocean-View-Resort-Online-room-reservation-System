@@ -31,7 +31,7 @@ public class ReservationDAOImpl implements ReservationDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                String last = rs.getString(1); // RES-20260201-005
+                String last = rs.getString(1); 
                 int lastSeq = Integer.parseInt(last.substring(last.length() - 3));
                 return prefix + String.format("%03d", lastSeq + 1);
             }
@@ -213,7 +213,7 @@ public class ReservationDAOImpl implements ReservationDAO {
         return false;
     }
 
-    // ✅ FULL DETAILS (JOIN)
+   
     @Override
     public List<ReservationDetails> getAllReservationDetails() {
 
@@ -270,7 +270,6 @@ public class ReservationDAOImpl implements ReservationDAO {
         return null;
     }
 
-    // ✅ SEARCH + FILTER
     @Override
     public List<ReservationDetails> searchReservations(String q, String status,
                                                       String fromDate, String toDate) {
@@ -289,7 +288,7 @@ public class ReservationDAOImpl implements ReservationDAO {
 
         List<Object> params = new ArrayList<>();
 
-        // ✅ Search box filter
+
         if (q != null && !q.trim().isEmpty()) {
             sql.append("""
                 AND (
@@ -307,7 +306,7 @@ public class ReservationDAOImpl implements ReservationDAO {
             params.add(like);
         }
 
-        // ✅ Status filter
+        
         if (status != null && !status.trim().isEmpty()
                 && !"ALL".equalsIgnoreCase(status)) {
 
@@ -315,7 +314,7 @@ public class ReservationDAOImpl implements ReservationDAO {
             params.add(status.trim());
         }
 
-        // ✅ Date filters (supports from only, to only, or both)
+        
 
         if (fromDate != null && !fromDate.trim().isEmpty()) {
             sql.append(" AND r.check_out_date > ? ");
@@ -370,9 +369,6 @@ public class ReservationDAOImpl implements ReservationDAO {
         }
     }
 
-    /**
-     * "Today Check-outs" = leaving today; usually CHECKED_IN guests or already CHECKED_OUT today.
-     */
     @Override
     public int countTodayCheckOuts() {
         String sql = """
@@ -402,11 +398,7 @@ public class ReservationDAOImpl implements ReservationDAO {
         }
     }
 
-    /**
-     * Available rooms today:
-     * 1) rooms.status must be AVAILABLE
-     * 2) not BOOKED in booking_calendar today
-     */
+
     @Override
     public int countAvailableRoomsToday() {
         String sql = """
@@ -429,11 +421,7 @@ public class ReservationDAOImpl implements ReservationDAO {
         }
     }
 
-    /**
-     * Today schedule list:
-     * - Show check-ins (PENDING/CONFIRMED arriving today)
-     * - Show check-outs (CHECKED_IN/CHECKED_OUT leaving today)
-     */
+
     @Override
     public List<ReservationDetails> getTodaySchedule(int limit) {
         List<ReservationDetails> list = new ArrayList<>();
@@ -501,8 +489,6 @@ public class ReservationDAOImpl implements ReservationDAO {
         }
     }
 
-
-    // ✅ mapper for ReservationDetails
     private ReservationDetails mapDetails(ResultSet rs) throws Exception {
         ReservationDetails d = new ReservationDetails();
 

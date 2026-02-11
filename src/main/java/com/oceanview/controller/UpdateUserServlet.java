@@ -33,7 +33,6 @@ public class UpdateUserServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        // -------- AUTH CHECK --------
         User admin = (User) session.getAttribute("user");
         if (admin == null || !"ADMIN".equals(admin.getRole())) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -50,7 +49,6 @@ public class UpdateUserServlet extends HttpServlet {
             return;
         }
 
-        // -------- READ FORM --------
         User user = new User();
         user.setUserId(userId);
         user.setFullName(request.getParameter("fullName"));

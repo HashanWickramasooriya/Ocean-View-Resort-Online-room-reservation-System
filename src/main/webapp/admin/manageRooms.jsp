@@ -44,16 +44,12 @@ body{
   min-height:100vh;
 }
 
-/* Layout */
 .layout{
   display:grid;
   grid-template-columns: 280px 1fr;
   min-height:100vh;
 }
 
-/* ============================= */
-/* ✅ SIDEBAR (LIKE YOUR DASH)   */
-/* ============================= */
 .sidebar{
   padding:22px 18px;
   border-right:1px solid rgba(255,255,255,0.10);
@@ -132,7 +128,23 @@ body{
   border: 1px solid rgba(255,255,255,0.14);
 }
 
-/* Logout Bottom (ONLY PINK) */
+.logo{
+  width:70px;
+  height:70px;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+}
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
 .sidebar-bottom{
   margin-top:auto;
   padding-top:18px;
@@ -161,14 +173,10 @@ body{
   transform: translateY(-1px);
 }
 
-/* ============================= */
-/* ✅ MAIN                        */
-/* ============================= */
 .main{
   padding:28px;
 }
 
-/* Header */
 .topbar{
   display:flex;
   justify-content:space-between;
@@ -192,7 +200,6 @@ body{
   font-weight:700;
 }
 
-/* Add Staff Button */
 .add-btn{
   padding:12px 18px;
   border-radius:16px;
@@ -205,7 +212,7 @@ body{
 }
 .add-btn:hover{ filter:brightness(1.05); }
 
-/* ✅ Success/Error message */
+
 .alert{
   margin-top:16px;
   padding:12px 14px;
@@ -225,7 +232,7 @@ body{
   color: rgba(159, 18, 57, 0.95);
 }
 
-/* Table Card */
+
 .card{
   margin-top:22px;
   border-radius:22px;
@@ -236,7 +243,6 @@ body{
   overflow:hidden;
 }
 
-/* Table */
 .table-wrap{
   overflow:auto;
 }
@@ -272,7 +278,6 @@ tbody tr:hover td{
   background: rgba(2,132,199,0.10);
 }
 
-/* Status pill */
 .pill{
   display:inline-flex;
   align-items:center;
@@ -285,7 +290,6 @@ tbody tr:hover td{
   color: rgba(2, 76, 129, 0.95);
 }
 
-/* Actions */
 .actions a{
   display:inline-flex;
   align-items:center;
@@ -319,7 +323,6 @@ tbody tr:hover td{
   background: rgba(251,113,133,0.18);
 }
 
-/* Responsive */
 @media (max-width: 1050px){
   .layout{ grid-template-columns: 1fr; }
   .sidebar{
@@ -335,11 +338,13 @@ tbody tr:hover td{
 
 <div class="layout">
 
-  <!-- Sidebar -->
   <aside class="sidebar">
 
     <div class="brand">
-      <div class="logo"></div>
+       <div class="logo">
+    <img src="<%= request.getContextPath() %>/AllComponents/images/Logo_2.png"
+         alt="Ocean View Resort Logo">
+</div>
       <div>
         <h1>Admin Panel</h1>
         <p>Ocean View Resort</p>
@@ -370,10 +375,8 @@ tbody tr:hover td{
 
   </aside>
 
-  <!-- Main -->
   <main class="main">
 
-    <!-- Header -->
     <div class="topbar">
       <div>
         <h2>Manage Rooms</h2>
@@ -383,7 +386,6 @@ tbody tr:hover td{
       <a class="add-btn" href="<%=request.getContextPath()%>/admin/addRoom.jsp">➕ Add Room</a>
     </div>
 
-    <!-- Table -->
     <div class="card">
       <table>
         <thead>

@@ -36,7 +36,6 @@ public class StaffDashboardServlet extends HttpServlet {
             req.setAttribute("pendingRequests", dao.countPendingReservations());
             req.setAttribute("todaySchedule", dao.getTodaySchedule(8));
 
-            // ✅ JSP is in /staff/
             req.getRequestDispatcher("/staff/dashboard.jsp").forward(req, resp);
 
         } catch (SQLException e) {

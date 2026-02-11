@@ -14,7 +14,7 @@ public class BookingCalendarDAOImpl implements BookingCalendarDAO {
     public boolean markBookedDates(int roomId, String reservationId, String checkIn, String checkOut) {
         String sql = "INSERT INTO booking_calendar(room_id,booking_date,status,reservation_id) VALUES(?,?, 'BOOKED', ?)";
         LocalDate start = LocalDate.parse(checkIn);
-        LocalDate end = LocalDate.parse(checkOut); // not included
+        LocalDate end = LocalDate.parse(checkOut); 
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             LocalDate d = start;
@@ -41,7 +41,7 @@ public class BookingCalendarDAOImpl implements BookingCalendarDAO {
             ps.setInt(1, roomId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                dates.add(rs.getDate(1).toString()); // yyyy-mm-dd
+                dates.add(rs.getDate(1).toString()); 
             }
         } catch (Exception e) { e.printStackTrace(); }
         return dates;
@@ -57,7 +57,4 @@ public class BookingCalendarDAOImpl implements BookingCalendarDAO {
         } catch (Exception e) { e.printStackTrace(); }
         return false;
     }
-    
-  
-
 }

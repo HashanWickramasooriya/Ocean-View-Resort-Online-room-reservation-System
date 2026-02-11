@@ -62,7 +62,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-/* ✅ LOOKS GOOD ON SCREEN + PRINT PREVIEW */
+
 :root{
   --ink:#0B1220;
   --muted:#667085;
@@ -92,7 +92,7 @@ body{
   margin: 0 auto;
 }
 
-/* buttons (not printed) */
+
 .actions{
   display:flex;
   justify-content:flex-end;
@@ -127,13 +127,13 @@ body{
   border:1px solid rgba(15,23,42,0.08);
 }
 
-/* top accent bar */
+
 .accent{
   height: 10px;
   background: linear-gradient(90deg, var(--brand), var(--brand2));
 }
 
-/* header */
+
 .header{
   padding:18px 22px;
   display:flex;
@@ -161,7 +161,7 @@ body{
 }
 .meta b{ color: var(--ink); }
 
-/* status pill */
+
 .badge{
   display:inline-flex;
   align-items:center;
@@ -182,13 +182,13 @@ body{
 .badge.bad .dot{ background:var(--bad); }
 .badge.neutral{ color:var(--neutral); background: rgba(51,65,85,0.06); }
 
-/* body layout */
+
 .body{
   padding: 18px 22px;
   position:relative;
 }
 
-/* optional watermark */
+
 .watermark:after{
   content:"OCEAN VIEW RESORT";
   position:absolute;
@@ -308,7 +308,7 @@ tr:last-child td{ border-bottom:none; }
 
 @page { size: A4; margin: 14mm; }
 
-/* PRINT */
+
 @media print{
   body{ background:#fff !important; padding:0 !important; }
   .actions{ display:none !important; }
@@ -405,13 +405,7 @@ tr:last-child td{ border-bottom:none; }
       </div>
 
     </div>
-
-    <div class="footer">
-      <div>Thank you for choosing <b>Ocean View Resort</b>.</div>
-      <div>Prepared by: <b><%= staff.getFullName() %></b></div>
-    </div>
-
-  </section>
+ </section>
 </div>
 </body>
 </html>

@@ -12,7 +12,7 @@ public class GuestDAOImpl implements GuestDAO {
         this.conn = conn;
     }
 
-    // ---------------- CREATE GUEST ----------------
+    // CREATE GUEST
     @Override
     public int createGuest(Guest g) {
 
@@ -46,7 +46,7 @@ public class GuestDAOImpl implements GuestDAO {
         return 0;
     }
 
-    // ---------------- GET GUEST BY ID ----------------
+    //GET GUEST BY ID
     @Override
     public Guest getGuestById(int guestId) {
 
@@ -78,7 +78,7 @@ public class GuestDAOImpl implements GuestDAO {
         return null;
     }
 
-    // ---------------- GET GUEST ID BY CONTACT + EMAIL ----------------
+    //  GET GUEST ID BY CONTACT + EMAIL 
     @Override
     public int getGuestIdByContactAndEmail(String contact, String email) {
 
@@ -99,7 +99,7 @@ public class GuestDAOImpl implements GuestDAO {
         return 0;
     }
 
-    // ---------------- UPDATE GUEST ----------------
+    // UPDATE GUEST 
     @Override
     public boolean updateGuest(Guest g) {
 

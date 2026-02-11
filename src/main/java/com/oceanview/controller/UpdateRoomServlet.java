@@ -38,7 +38,7 @@ public class UpdateRoomServlet extends HttpServlet {
         try {
             int roomId = Integer.parseInt(req.getParameter("roomId"));
 
-            // ===== UPDATE ROOM DETAILS =====
+            // UPDATE ROOM DETAILS
             Room room = new Room();
             room.setRoomId(roomId);
             room.setRoomName(req.getParameter("roomName"));
@@ -52,7 +52,6 @@ public class UpdateRoomServlet extends HttpServlet {
 
             dao.updateRoom(room);
 
-            // ===== CORRECT RUNTIME UPLOAD PATH =====
             String appPath = req.getServletContext().getRealPath("");
             String uploadPath = appPath + File.separator + "uploads" + File.separator + "rooms";
 
@@ -63,7 +62,7 @@ public class UpdateRoomServlet extends HttpServlet {
 
             System.out.println("UPLOAD PATH = " + uploadPath);
 
-            // ===== SAVE NEW IMAGES =====
+            //SAVE NEW IMAGES 
             List<String> images = new ArrayList<>();
 
             for (Part part : req.getParts()) {

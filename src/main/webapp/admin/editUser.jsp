@@ -5,14 +5,12 @@
 <%@ page import="com.oceanview.database.DBConnection" %>
 
 <%
-    // ================= ADMIN AUTH CHECK =================
     User admin = (User) session.getAttribute("user");
     if (admin == null || !"ADMIN".equals(admin.getRole())) {
         response.sendRedirect(request.getContextPath() + "/login.jsp");
         return;
     }
 
-    // ================= GET ID =================
     String idParam = request.getParameter("id");
     if (idParam == null) {
         response.sendRedirect(request.getContextPath() + "/admin/manageStaff.jsp");
@@ -27,7 +25,6 @@
         return;
     }
 
-    // ================= LOAD USER =================
     UserDAO userDAO = new UserDAOImpl(DBConnection.getConnection());
     User user = userDAO.getUserById(userId);
     if (user == null) {
@@ -35,9 +32,8 @@
         return;
     }
 
-    // ================= FLASH MESSAGE (redirect safe) =================
     String message = (String) session.getAttribute("message");
-    String messageType = (String) session.getAttribute("messageType"); // success | error
+    String messageType = (String) session.getAttribute("messageType"); 
 
     String safeType = "";
     if (messageType != null) {
@@ -58,16 +54,37 @@
 <title>Edit User | Ocean View Resort</title>
 <%@ include file="/AllComponents/css/AllCSS.jsp" %>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+.logo{
+  width:70px;
+  height:70px;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+}
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+</style>
 </head>
 
 <body>
 
 <div class="layout">
 
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo"></div>
+       <div class="logo">
+    <img src="<%= request.getContextPath() %>/AllComponents/images/Logo_2.png"
+         alt="Ocean View Resort Logo">
+</div>
       <div>
         <h1>Admin Panel</h1>
         <p>Ocean View Resort</p>
@@ -94,10 +111,8 @@
     </div>
   </aside>
 
-  <!-- Main -->
   <main class="main">
 
-    <!-- Header -->
     <div class="topbar">
       <div>
         <h2>Edit User</h2>
@@ -107,7 +122,6 @@
       <a class="back-btn" href="<%=request.getContextPath()%>/admin/manageStaff.jsp">← Back</a>
     </div>
 
-    <!-- Form Card -->
     <div class="card">
 
       <% if (message != null && !message.trim().isEmpty()) { %>

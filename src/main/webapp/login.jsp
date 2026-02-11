@@ -24,8 +24,12 @@
   <div class="ov-shell">
     <div class="ov-topbar">
       <div class="ov-top-left">
-        <div class="ov-mini-logo"><i class="fa-solid fa-water"></i></div>
-        <span class="ov-mini-brand">Ocean View Resort</span>
+        <div class="ov-mini-logo">
+    		<img src="<%= request.getContextPath() %>/AllComponents/images/Logo_1.png"
+    		 alt="Ocean View Resort Logo"
+    		 class="ov-logo-img">
+		</div>
+       
       </div>
 
       <div class="ov-top-links d-none d-md-flex">
@@ -50,18 +54,17 @@
 
         <h1 class="ov-headline">Manage the resort operations.</h1>
         <p class="ov-desc">
-          Sign in to access booking management, guest check-in/check-out, room availability,
-          and administrative controls. This portal is restricted to authorized staff only.
+          Sign in to manage reservations, check guests in and out, update room status, and handle billing. 
+          This staff portal is for authorized Ocean View Resort employees only.
         </p>
 
         <div class="ov-badges">
-          <span><i class="fa-solid fa-shield-heart"></i> Secure Access</span>
+         
           <span><i class="fa-solid fa-clipboard-check"></i> Front Desk</span>
           <span><i class="fa-solid fa-gear"></i> Admin Tools</span>
         </div>
       </div>
 
-      <!-- Right login card -->
       <div class="ov-right">
         <div class="ov-card">
 
@@ -76,7 +79,6 @@
 
           <form action="<%= request.getContextPath() %>/login" method="post" autocomplete="off">
 
-            <!-- ✅ Role selection -->
             <div class="ov-role">
               <input type="radio" name="role" id="roleAdmin" value="ADMIN" checked>
               <label for="roleAdmin"><i class="fa-solid fa-user-tie"></i> Admin</label>

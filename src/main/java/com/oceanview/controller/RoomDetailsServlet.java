@@ -71,7 +71,6 @@ public class RoomDetailsServlet extends HttpServlet {
         }
     }
 
-    // Safe JSON string escape (also keeps new lines)
     private static String json(String s) {
         if (s == null) return "";
         return s.replace("\\", "\\\\")

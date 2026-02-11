@@ -139,6 +139,24 @@ body{
   top: calc(100vh - 100px);
   margin-top:22px;
 }
+.logo{
+  width:70px;
+  height:70px;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+}
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
 .logout{
   display:block;
   text-align:center;
@@ -338,7 +356,6 @@ body{
   font-weight:700;
 }
 
-
 @media (max-width: 1050px){
   .layout{ grid-template-columns: 1fr; }
   .sidebar{ border-right:none; border-bottom:1px solid rgba(15,23,42,0.12); }
@@ -354,7 +371,10 @@ body{
   <!--  Sidebar -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo"></div>
+       <div class="logo">
+    <img src="<%= request.getContextPath() %>/AllComponents/images/Logo_2.png"
+         alt="Ocean View Resort Logo">
+</div>
       <div>
         <h1>Admin Panel</h1>
         <p>Ocean View Resort</p>

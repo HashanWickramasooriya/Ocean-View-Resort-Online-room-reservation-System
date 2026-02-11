@@ -20,7 +20,6 @@ public class DeleteRoomImageServlet extends HttpServlet {
 
         try (Connection conn = DBConnection.getConnection()) {
 
-            // Get image path
             PreparedStatement ps = conn.prepareStatement(
                     "SELECT image_path FROM room_images WHERE image_id=?");
             ps.setInt(1, imageId);
@@ -29,13 +28,11 @@ public class DeleteRoomImageServlet extends HttpServlet {
             if (rs.next()) {
                 String path = rs.getString("image_path");
 
-                // Delete file from server
                 String fullPath = getServletContext().getRealPath("") + File.separator + path;
                 File f = new File(fullPath);
                 if (f.exists()) f.delete();
             }
 
-            // Delete from DB
             ps = conn.prepareStatement("DELETE FROM room_images WHERE image_id=?");
             ps.setInt(1, imageId);
             ps.executeUpdate();

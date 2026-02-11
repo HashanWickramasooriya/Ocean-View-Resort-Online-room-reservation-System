@@ -10,7 +10,6 @@
   integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
   crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<!-- ✅ Your main CSS -->
 <link rel="stylesheet" href="<%= request.getContextPath() %>/AllComponents/css/style.css">
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

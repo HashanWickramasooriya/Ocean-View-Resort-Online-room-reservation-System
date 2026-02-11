@@ -36,14 +36,12 @@ public class CancelReservationServlet extends HttpServlet {
             ReservationDAO resDAO = new ReservationDAOImpl(conn);
             BookingCalendarDAO calDAO = new BookingCalendarDAOImpl(conn);
 
-            // 1) cancel reservation
             if (!resDAO.cancelReservation(id)) {
                 conn.rollback();
                 resp.sendRedirect(req.getContextPath() + "/staff/manageReservations.jsp?error=Cancel failed");
                 return;
             }
 
-            // 2) remove booked calendar dates
             calDAO.clearReservationDates(id);
 
             conn.commit();

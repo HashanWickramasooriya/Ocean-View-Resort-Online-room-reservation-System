@@ -16,7 +16,6 @@ public class Room {
     private String facilities;
     private String status;
 
-    // ✅ Add images list
     private List<String> images = new ArrayList<>();
 
     public int getRoomId() { return roomId; }

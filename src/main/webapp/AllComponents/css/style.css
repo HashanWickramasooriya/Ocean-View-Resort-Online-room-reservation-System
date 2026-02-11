@@ -1,10 +1,8 @@
 @charset "UTF-8";
 
-/* =========================
-   Global Variables (Merged)
-   ========================= */
+
 :root{
-  /* Login palette */
+  
   --deep-ocean: #0B2D39;
   --teal: #0EA5A4;
   --sunset-gold: #F4C95D;
@@ -14,7 +12,7 @@
   --muted-text: #64748B;
   --border: #E5E7EB;
 
-  /* Dashboard palette */
+  
   --bg:#E0F2FE;
   --primary:#0284C7;
   --sky:#22c1f0;
@@ -37,9 +35,7 @@
 
 *{ box-sizing:border-box; }
 
-/* =========================
-   Base (Dashboard pages)
-   ========================= */
+
 body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
@@ -51,14 +47,12 @@ body{
   min-height:100vh;
 }
 
-/* Layout */
 .layout{
   display:grid;
   grid-template-columns: 280px 1fr;
   min-height:100vh;
 }
 
-/* Sidebar */
 .sidebar{
   padding:22px 18px;
   border-right:1px solid rgba(255,255,255,0.10);
@@ -124,7 +118,6 @@ body{
   border: 1px solid rgba(255,255,255,0.14);
 }
 
-/* Logout bottom */
 .sidebar-bottom{ margin-top:auto; padding-top:18px; }
 .logout{
   display:block;
@@ -146,10 +139,8 @@ body{
   transform: translateY(-1px);
 }
 
-/* Main */
 .main{ padding:28px; }
 
-/* Topbar */
 .topbar{
   display:flex;
   justify-content:space-between;
@@ -176,7 +167,6 @@ body{
 }
 .back-btn:hover{ background: rgba(2,132,199,0.18); }
 
-/* Cards */
 .card{
   margin-top:22px;
   border-radius:22px;
@@ -187,7 +177,6 @@ body{
   padding:22px;
 }
 
-/* Form grid */
 .form-grid{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -277,7 +266,6 @@ input:focus, select:focus, textarea:focus{
   font-size:12px;
 }
 
-/* Responsive base */
 @media (max-width: 1050px){
   .layout{ grid-template-columns: 1fr; }
   .sidebar{
@@ -290,9 +278,7 @@ input:focus, select:focus, textarea:focus{
   .form-grid{ grid-template-columns: 1fr; }
 }
 
-/* =========================
-   LOGIN PAGE (Your .ov-*)
-   ========================= */
+
 .ov-galileo{
   min-height: 100vh;
   position: relative;
@@ -309,7 +295,16 @@ input:focus, select:focus, textarea:focus{
   background-repeat: no-repeat;
 }
 
-/* floating blobs */
+.ov-logo-img {
+    height: 105px;
+    width: auto;
+}
+
+.ov-logo-big-img {
+    height: 120px;
+    width: auto;
+}
+
 .ov-blob{
   position:absolute;
   border-radius: 999px;
@@ -326,7 +321,6 @@ input:focus, select:focus, textarea:focus{
   50%{ transform: translate(12px, 18px) scale(1.03); }
 }
 
-/* outer shell */
 .ov-shell{
   width: min(1100px, 92vw);
   border-radius: 22px;
@@ -340,7 +334,6 @@ input:focus, select:focus, textarea:focus{
   z-index: 2;
 }
 
-/* topbar */
 .ov-topbar{
   display:flex;
   justify-content:space-between;
@@ -352,21 +345,10 @@ input:focus, select:focus, textarea:focus{
   align-items:center;
   gap: 10px;
 }
-.ov-mini-logo{
-  width: 34px; height: 34px;
-  border-radius: 12px;
-  display:flex; align-items:center; justify-content:center;
-  background: rgba(255,255,255,0.22);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: #fff;
-}
-.ov-mini-brand{
-  font-weight: 800;
-  color: rgba(255,255,255,0.92);
-}
+
+
 .ov-top-menu{ color: rgba(255,255,255,0.90); font-size: 18px; }
 
-/* main grid */
 .ov-grid{
   display:grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -374,7 +356,6 @@ input:focus, select:focus, textarea:focus{
   padding: 6px 10px 0;
 }
 
-/* left */
 .ov-left{
   padding: 26px 18px 18px;
   color: #FFFFFF;
@@ -430,7 +411,6 @@ input:focus, select:focus, textarea:focus{
   color: #fff;
 }
 
-/* right */
 .ov-right{
   display:flex;
   align-items:center;
@@ -438,7 +418,6 @@ input:focus, select:focus, textarea:focus{
   padding: 10px;
 }
 
-/* login card */
 .ov-card{
   width: 100%;
   max-width: 430px;
@@ -449,6 +428,11 @@ input:focus, select:focus, textarea:focus{
   box-shadow: 0 16px 45px rgba(11,45,57,0.18);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.ov-card:hover {
+    transform: translateY(-5px);
 }
 
 .ov-card-header{ text-align:center; margin-bottom: 14px; }
@@ -531,7 +515,6 @@ input:focus, select:focus, textarea:focus{
   font-size: 0.92rem;
 }
 
-/* Staff Portal add-ons */
 .ov-pill{
   padding: 8px 12px;
   border-radius: 999px;
@@ -544,7 +527,6 @@ input:focus, select:focus, textarea:focus{
   gap: 8px;
 }
 
-/* Role switch */
 .ov-role{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -576,7 +558,6 @@ input:focus, select:focus, textarea:focus{
   box-shadow: 0 10px 22px rgba(14,165,164,0.18);
 }
 
-/* responsive login */
 @media (max-width: 900px){
   .ov-grid{ grid-template-columns: 1fr; }
   .ov-left{ text-align:center; }

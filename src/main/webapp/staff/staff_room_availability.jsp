@@ -18,7 +18,6 @@
 
     List<Room> rooms = (List<Room>) request.getAttribute("rooms");
 
-    // KPI helpers
     int availableCount = (rooms == null) ? 0 : rooms.size();
     double minRate = -1;
     if (rooms != null) {
@@ -73,7 +72,6 @@ body{
 
 .app{ display:grid; grid-template-columns: 290px 1fr; min-height:100vh; }
 
-/* Sidebar */
 .sidebar{
   padding:22px 18px;
   border-right:1px solid rgba(255,255,255,0.10);
@@ -82,18 +80,21 @@ body{
 }
 .brand{ display:flex; gap:12px; align-items:center; padding:10px 10px 18px; }
 .logo{
-  width:46px;height:46px;border-radius:16px;
-  background: linear-gradient(135deg, var(--a), var(--b));
-  box-shadow: 0 14px 34px rgba(34,211,238,0.15);
-  position:relative;
+  width:70px;
+  height:70px;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
 }
-.logo:after{
-  content:"";
-  position:absolute;
-  inset:10px;
-  border-radius:12px;
-  background: rgba(255,255,255,0.20);
-  transform: rotate(10deg);
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
 }
 .brand h1{ margin:0; font-size:15px; font-weight:950; }
 .brand p{ margin:4px 0 0; font-size:12px; font-weight:700; color:var(--muted); }
@@ -134,7 +135,6 @@ body{
 }
 .logout:hover{ background: rgba(251,113,133,0.28); transform: translateY(-2px); }
 
-/* Main */
 .main{ padding:22px 22px 28px; width:100%; }
 .topbar{
   display:flex;
@@ -166,7 +166,6 @@ body{
 .cardHead span{ color:var(--muted); font-weight:750; font-size:12px; }
 .cardBody{ padding:14px 16px 16px; }
 
-/* KPI cards */
 .kpis{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -195,7 +194,6 @@ body{
 .kpiValue{ margin-top:12px; font-size:34px; font-weight:950; }
 .kpiHint{ margin-top:4px; color:var(--muted); font-weight:700; font-size:13px; }
 
-/* Alerts */
 .alert{
   border-radius:18px;
   padding:12px 14px;
@@ -222,7 +220,6 @@ body{
   font-weight:900;
 }
 
-/* Form controls */
 .filters{
   display:grid;
   grid-template-columns: 1.2fr 1.2fr 1fr 1fr;
@@ -268,7 +265,6 @@ input:focus, select:focus{
 }
 .btnPrimary:hover{ transform: translateY(-2px); filter:saturate(1.15); }
 
-/* Results table */
 .controlsRow{
   display:flex;
   gap:10px;
@@ -370,7 +366,10 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo"></div>
+       <div class="logo">
+    <img src="<%= request.getContextPath() %>/AllComponents/images/Logo_2.png"
+         alt="Ocean View Resort Logo">
+</div>
       <div>
         <h1>Reception Desk</h1>
         <p>Ocean View Resort</p>
@@ -492,7 +491,6 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
 
     <% if(rooms != null){ %>
 
-      <!-- KPI Summary -->
       <div class="kpis">
         <div class="kpi">
           <div class="kpiTop"><div class="kpiTitle">Available Rooms</div><div class="kpiMeta">Results</div></div>
@@ -521,7 +519,6 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
         </div>
       </div>
 
-      <!-- Results -->
       <section class="card">
         <div class="cardHead">
           <h3>Available Rooms</h3>
@@ -561,7 +558,6 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
                       </td>
                       <td>
                         <div class="actions">
-                          <!-- ✅ Quick create reservation (optional) -->
                           <a class="actionBtn add"
                              href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp?roomId=<%= r.getRoomId() %>&checkIn=<%= checkInVal %>&checkOut=<%= checkOutVal %>">
                              ➕ Add Reservation
@@ -585,14 +581,12 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
 </div>
 
 <script>
-  // keep selected roomType after search
   (function(){
     var selected = "<%= roomTypeVal %>";
     var sel = document.getElementById("roomType");
     if(sel) sel.value = selected;
   })();
 
-  // close alert
   function closeMsg(){
     const box = document.getElementById("msgBox");
     if(!box) return;
@@ -602,7 +596,6 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
   }
   setTimeout(closeMsg, 4000);
 
-  // validate dates (checkout after checkin)
   document.getElementById("searchForm")?.addEventListener("submit", function(e){
     const inVal = document.getElementById("checkIn").value;
     const outVal = document.getElementById("checkOut").value;
@@ -612,7 +605,6 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
     }
   });
 
-  // client-side filter/search + sort (no backend change)
   const q = document.getElementById("q");
   const sortBy = document.getElementById("sortBy");
   const tbody = document.querySelector("#roomsTable tbody");
@@ -627,7 +619,6 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
   }
 
   function parseNum(str){
-    // remove commas
     return parseFloat((str || "").replace(/,/g,"")) || 0;
   }
 
@@ -651,7 +642,6 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
       if(mode === "rateDesc") return rateB - rateA;
       if(mode === "adult") return adultB - adultA;
 
-      // default room no
       return roomA.localeCompare(roomB, undefined, {numeric:true, sensitivity:"base"});
     });
 
@@ -661,7 +651,6 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
   q?.addEventListener("input", filterRows);
   sortBy?.addEventListener("change", function(){ sortRows(); filterRows(); });
 
-  // run once if table exists
   sortRows();
 </script>
 

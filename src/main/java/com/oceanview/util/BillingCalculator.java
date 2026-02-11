@@ -5,9 +5,8 @@ import java.time.temporal.ChronoUnit;
 
 public class BillingCalculator {
 
-    // change these as you want
-    public static final double TAX_RATE = 0.10;           // 10%
-    public static final double EXTRA_GUEST_FEE = 500.00;  // per guest per night after base
+    public static final double TAX_RATE = 0.10;           
+    public static final double EXTRA_GUEST_FEE = 500.00;  
 
     public static long nights(String checkIn, String checkOut) {
         LocalDate in = LocalDate.parse(checkIn);

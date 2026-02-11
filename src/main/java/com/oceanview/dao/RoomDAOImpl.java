@@ -153,8 +153,6 @@ public class RoomDAOImpl implements RoomDAO {
         return imgs;
     }
     
- // Add these methods to RoomDAOImpl.java
-
     public List<Room> getRoomsByType(String roomType) {
         List<Room> list = new ArrayList<>();
         try (PreparedStatement ps = conn.prepareStatement(
@@ -201,7 +199,6 @@ public class RoomDAOImpl implements RoomDAO {
         return r;
     }
     
- // ✅ Staff Room Availability (date range)
     @Override
     public List<Room> getAvailableRooms(String checkIn, String checkOut, String roomType) {
 

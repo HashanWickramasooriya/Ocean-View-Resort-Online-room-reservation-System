@@ -20,15 +20,13 @@ public class StaffRoomAvailabilityServlet extends HttpServlet {
 
         String checkIn = req.getParameter("checkIn");
         String checkOut = req.getParameter("checkOut");
-        String roomType = req.getParameter("roomType"); // optional
+        String roomType = req.getParameter("roomType"); 
 
-        // First time open page (no search yet)
         if (checkIn == null || checkOut == null || checkIn.isBlank() || checkOut.isBlank()) {
             req.getRequestDispatcher("/staff/staff_room_availability.jsp").forward(req, resp);
             return;
         }
 
-        // Validate date order
         try {
             LocalDate in = LocalDate.parse(checkIn);
             LocalDate out = LocalDate.parse(checkOut);
@@ -44,7 +42,6 @@ public class StaffRoomAvailabilityServlet extends HttpServlet {
             return;
         }
 
-        // ✅ Handle SQLException here
         try (Connection conn = DBConnection.getConnection()) {
 
             RoomDAO roomDAO = new RoomDAOImpl(conn);
@@ -55,7 +52,6 @@ public class StaffRoomAvailabilityServlet extends HttpServlet {
             req.setAttribute("error", "Database error: " + e.getMessage());
         }
 
-        // Keep values after search
         req.setAttribute("checkIn", checkIn);
         req.setAttribute("checkOut", checkOut);
         req.setAttribute("roomType", roomType);

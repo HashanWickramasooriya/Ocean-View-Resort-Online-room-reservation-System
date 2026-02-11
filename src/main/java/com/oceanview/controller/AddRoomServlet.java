@@ -36,7 +36,7 @@ public class AddRoomServlet extends HttpServlet {
             throws IOException, ServletException {
 
         try {
-            // ===== SAVE ROOM DETAILS =====
+            // SAVE ROOM DETAILS 
             Room room = new Room();
             room.setRoomNumber(req.getParameter("roomNumber"));
             room.setRoomName(req.getParameter("roomName"));
@@ -49,7 +49,6 @@ public class AddRoomServlet extends HttpServlet {
 
             int roomId = dao.addRoom(room);
 
-            // ===== CORRECT RUNTIME UPLOAD PATH =====
             String appPath = req.getServletContext().getRealPath("");
             String uploadPath = appPath + File.separator + "uploads" + File.separator + "rooms";
 
@@ -60,7 +59,7 @@ public class AddRoomServlet extends HttpServlet {
 
             System.out.println("UPLOAD PATH = " + uploadPath);
 
-            // ===== SAVE IMAGES =====
+            // SAVE IMAGES 
             List<String> images = new ArrayList<>();
 
             for (Part part : req.getParts()) {
@@ -69,7 +68,6 @@ public class AddRoomServlet extends HttpServlet {
                     String fileName = System.currentTimeMillis() + "_" + part.getSubmittedFileName();
                     part.write(uploadPath + File.separator + fileName);
 
-                    // Path stored in DB (used in JSP)
                     images.add("uploads/rooms/" + fileName);
                 }
             }

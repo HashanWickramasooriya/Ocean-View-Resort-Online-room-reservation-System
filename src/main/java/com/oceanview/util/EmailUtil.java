@@ -12,7 +12,6 @@ public class EmailUtil {
 
     private static final String SMTP_USER = "kasuniik417@gmail.com";
 
-    // ⚠️ IMPORTANT: keep this private (use a NEW app password)
     private static final String SMTP_PASS = "ddikeasiutccrfju";
 
     private static Session buildSession() {
@@ -22,8 +21,7 @@ public class EmailUtil {
         props.put("mail.smtp.starttls.required", "true");
         props.put("mail.smtp.host", SMTP_HOST);
         props.put("mail.smtp.port", SMTP_PORT);
-        props.put("mail.smtp.ssl.protocols", "TLSv1.2"); // good for Java 17+ / 23
-
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2"); 
         return Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -32,7 +30,6 @@ public class EmailUtil {
         });
     }
 
-    // ✅ Plain text email
     public static void sendTextEmail(String to, String subject, String body) {
         if (to == null || to.trim().isEmpty()) return;
 
@@ -51,7 +48,6 @@ public class EmailUtil {
         }
     }
 
-    // ✅ HTML email (nice design)
     public static void sendHtmlEmail(String to, String subject, String htmlBody) {
         if (to == null || to.trim().isEmpty()) return;
 

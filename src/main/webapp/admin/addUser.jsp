@@ -11,7 +11,6 @@
     String message = (String) request.getAttribute("message");
     String messageType = (String) request.getAttribute("messageType"); // "success" or "error"
 
-    // ✅ Normalize messageType so styling always works
     String safeType = "";
     if (messageType != null) {
         if ("success".equalsIgnoreCase(messageType)) safeType = "success";
@@ -33,7 +32,6 @@
 
 <div class="layout">
 
-  <!-- Sidebar -->
   <aside class="sidebar">
 
     <div class="brand">
@@ -65,7 +63,6 @@
 
   </aside>
 
-  <!-- Main -->
   <main class="main">
 
     <div class="topbar">
@@ -123,7 +120,6 @@
 
         </div>
 
-        <!-- ✅ centered buttons -->
         <div class="actions">
           <a class="btn btn-ghost" href="<%=request.getContextPath()%>/admin/manageStaff.jsp">Cancel</a>
           <button class="btn btn-primary" type="submit">Add User</button>

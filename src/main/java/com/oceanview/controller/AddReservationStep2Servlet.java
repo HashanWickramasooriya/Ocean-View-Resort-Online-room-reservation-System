@@ -19,7 +19,6 @@ public class AddReservationStep2Servlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        // -------- AUTH CHECK --------
         User staff = (User) req.getSession().getAttribute("user");
         if (staff == null || !"STAFF".equals(staff.getRole())) {
             resp.sendRedirect(req.getContextPath() + "/login.jsp");
@@ -28,7 +27,6 @@ public class AddReservationStep2Servlet extends HttpServlet {
 
         HttpSession session = req.getSession();
 
-        // -------- READ STEP-1 SESSION DATA --------
         String reservationId = (String) session.getAttribute("step_reservationId");
         Integer roomId       = (Integer) session.getAttribute("step_roomId");
         String checkIn       = (String) session.getAttribute("step_checkIn");
@@ -42,7 +40,6 @@ public class AddReservationStep2Servlet extends HttpServlet {
             return;
         }
 
-        // -------- READ GUEST FORM --------
         Guest g = new Guest();
         g.setGuestName(req.getParameter("guestName"));
         g.setAddress(req.getParameter("address"));
@@ -57,7 +54,6 @@ public class AddReservationStep2Servlet extends HttpServlet {
             g.setDateOfBirth(java.sql.Date.valueOf(dob));
         }
 
-        // -------- BASIC VALIDATION --------
         if (g.getGuestName() == null || g.getGuestName().trim().isEmpty()
                 || g.getAddress() == null || g.getAddress().trim().isEmpty()
                 || g.getContactNumber() == null || g.getContactNumber().trim().isEmpty()
@@ -78,17 +74,14 @@ public class AddReservationStep2Servlet extends HttpServlet {
             ReservationDAO resDAO = new ReservationDAOImpl(conn);
             BookingCalendarDAO calDAO = new BookingCalendarDAOImpl(conn);
 
-            // ✅ re-check availability
             if (!resDAO.isRoomAvailable(roomId, checkIn, checkOut)) {
                 conn.rollback();
                 resp.sendRedirect(req.getContextPath() + "/staff/addReservationStep1.jsp?error=Room became unavailable");
                 return;
             }
 
-            // ✅ find existing guest by contact+email
             guestId = guestDAO.getGuestIdByContactAndEmail(g.getContactNumber(), g.getEmail());
 
-            // ✅ if not found, create new
             if (guestId == 0) {
                 guestId = guestDAO.createGuest(g);
                 if (guestId == 0) {
@@ -97,12 +90,10 @@ public class AddReservationStep2Servlet extends HttpServlet {
                     return;
                 }
             } else {
-                // ✅ optional: update existing guest details (recommended)
                 g.setGuestId(guestId);
                 guestDAO.updateGuest(g);
             }
 
-            // ✅ create reservation
             Reservation r = new Reservation();
             r.setReservationId(reservationId);
             r.setGuestId(guestId);
@@ -122,7 +113,6 @@ public class AddReservationStep2Servlet extends HttpServlet {
                 return;
             }
 
-            // ✅ calendar mark booked
             if (!calDAO.markBookedDates(roomId, reservationId, checkIn, checkOut)) {
                 conn.rollback();
                 resp.sendRedirect(req.getContextPath() + "/staff/addReservationStep2.jsp?error=Calendar booking failed");
@@ -141,7 +131,6 @@ public class AddReservationStep2Servlet extends HttpServlet {
             try { if (conn != null) conn.close(); } catch (Exception ignore) {}
         }
 
-        // -------- AFTER COMMIT: GET ROOM + SEND EMAIL --------
         Room room = null;
         try (Connection conn2 = DBConnection.getConnection()) {
             RoomDAO roomDAO = new RoomDAOImpl(conn2);
@@ -150,7 +139,6 @@ public class AddReservationStep2Servlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // Email should NOT break booking
         try {
             if (room != null) {
                 String subject = "Ocean View Resort - Booking Confirmed (" + reservationId + ")";
@@ -191,7 +179,6 @@ public class AddReservationStep2Servlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // -------- CLEAR STEP SESSION --------
         session.removeAttribute("step_reservationId");
         session.removeAttribute("step_roomId");
         session.removeAttribute("step_checkIn");

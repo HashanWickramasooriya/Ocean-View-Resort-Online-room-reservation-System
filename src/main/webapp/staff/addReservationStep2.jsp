@@ -56,7 +56,6 @@ body{
 
 .app{ display:grid; grid-template-columns: 290px 1fr; min-height:100vh; }
 
-/* Sidebar */
 .sidebar{
   padding:22px 18px;
   border-right:1px solid rgba(255,255,255,0.10);
@@ -65,18 +64,21 @@ body{
 }
 .brand{ display:flex; gap:12px; align-items:center; padding:10px 10px 18px; }
 .logo{
-  width:46px;height:46px;border-radius:16px;
-  background: linear-gradient(135deg, var(--a), var(--b));
-  box-shadow: 0 14px 34px rgba(34,211,238,0.15);
-  position:relative;
+  width:70px;
+  height:70px;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
 }
-.logo:after{
-  content:"";
-  position:absolute;
-  inset:10px;
-  border-radius:12px;
-  background: rgba(255,255,255,0.20);
-  transform: rotate(10deg);
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
 }
 .brand h1{ margin:0; font-size:15px; font-weight:950; }
 .brand p{ margin:4px 0 0; font-size:12px; font-weight:700; color:var(--muted); }
@@ -123,7 +125,6 @@ body{
   width: 100%;
 }
 
-/* Topbar */
 .topbar{
   display:flex;
   align-items:flex-start;
@@ -161,7 +162,6 @@ body{
 }
 .stepArrow{ color: rgba(234,242,255,0.55); font-weight:900; }
 
-/* Card */
 .card{
   border-radius: var(--radius);
   background: var(--card2);
@@ -183,7 +183,6 @@ body{
 .cardHead span{ color:var(--muted); font-weight:750; font-size:12px; }
 .cardBody{ padding:14px 16px 16px; }
 
-/* Alerts */
 .alert{
   border-radius:18px;
   padding:12px 14px;
@@ -221,7 +220,6 @@ body{
   to{opacity:1; transform:translateY(0);}
 }
 
-/* Meta */
 .metaRow{
   display:flex;
   gap:10px;
@@ -238,7 +236,6 @@ body{
   color: rgba(234,242,255,0.86);
 }
 
-/* Form */
 .formGrid{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -318,10 +315,12 @@ textarea{ resize:vertical; min-height:96px; }
 <body>
 <div class="app">
 
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo"></div>
+      <div class="logo">
+    <img src="<%= request.getContextPath() %>/AllComponents/images/Logo_2.png"
+         alt="Ocean View Resort Logo">
+</div>
       <div>
         <h1>Reception Desk</h1>
         <p>Ocean View Resort</p>
@@ -377,7 +376,6 @@ textarea{ resize:vertical; min-height:96px; }
       </div>
     </div>
 
-    <!-- ✅ Success / Error messages -->
     <% if(success != null){ %>
       <div class="alert success" id="msgBox">
         <div>✅ <%= success %></div>

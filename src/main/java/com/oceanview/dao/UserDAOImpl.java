@@ -15,7 +15,7 @@ public class UserDAOImpl implements UserDAO {
         this.conn = conn;
     }
 
-    // ---------------- CREATE USER ----------------
+    // CREATE USER
     @Override
     public boolean createUser(User user) {
         if (isUsernameExists(user.getUsername())) {
@@ -40,7 +40,7 @@ public class UserDAOImpl implements UserDAO {
         return result;
     }
 
-    // ---------------- LOGIN ----------------
+    // LOGIN 
     @Override
     public User login(String username, String password) {
         User user = null;
@@ -62,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
-    // ---------------- GET USER BY ID ----------------
+    // GET USER BY ID
     @Override
     public User getUserById(int userId) {
         User user = null;
@@ -80,7 +80,7 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
-    // ---------------- GET ALL USERS ----------------
+    // GET ALL USERS 
     @Override
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
@@ -99,7 +99,7 @@ public class UserDAOImpl implements UserDAO {
         return users;
     }
 
-    // ---------------- UPDATE USER ----------------
+    // UPDATE USER 
     @Override
     public boolean updateUser(User user) {
         boolean result = false;
@@ -121,7 +121,7 @@ public class UserDAOImpl implements UserDAO {
         return result;
     }
 
-    // ---------------- DELETE USER (SOFT) ----------------
+    //  DELETE USER 
     @Override
     public boolean deleteUser(int userId) {
         String sql = "DELETE FROM users WHERE user_id = ?";
@@ -134,7 +134,7 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-    // ---------------- CHECK USERNAME ----------------
+    //  CHECK USERNAME 
     @Override
     public boolean isUsernameExists(String username) {
         boolean exists = false;
@@ -150,7 +150,7 @@ public class UserDAOImpl implements UserDAO {
         return exists;
     }
 
-    // ---------------- RESET PASSWORD ----------------
+    //  RESET PASSWORD 
     @Override
     public boolean updatePassword(int userId, String newPassword) {
         boolean result = false;
@@ -166,7 +166,7 @@ public class UserDAOImpl implements UserDAO {
         return result;
     }
 
-    // ---------------- PRIVATE MAPPER ----------------
+    //  PRIVATE MAPPER 
     private User mapUser(ResultSet rs) throws SQLException {
         User user = new User();
         user.setUserId(rs.getInt("user_id"));

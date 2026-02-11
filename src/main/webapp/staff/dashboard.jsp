@@ -72,19 +72,23 @@ body{
 
 .brand{ display:flex; gap:12px; align-items:center; padding:10px 10px 18px; }
 .logo{
-  width:46px;height:46px;border-radius:16px;
-  background: linear-gradient(135deg, var(--a), var(--b));
-  box-shadow: 0 14px 34px rgba(34,211,238,0.15);
-  position:relative;
+  width:70px;
+  height:70px;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
 }
-.logo:after{
-  content:"";
-  position:absolute;
-  inset:10px;
-  border-radius:12px;
-  background: rgba(255,255,255,0.20);
-  transform: rotate(10deg);
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
 }
+
 .brand h1{ margin:0; font-size:15px; font-weight:950; }
 .brand p{ margin:4px 0 0; font-size:12px; font-weight:700; color:var(--muted); }
 
@@ -184,7 +188,7 @@ body{
 .grid{
   margin-top:16px;
   display:grid;
-  grid-template-columns: 1fr 1fr; /* ✅ now two cards side by side */
+  grid-template-columns: 1fr 1fr; 
   gap:14px;
   align-items:start;
 }
@@ -207,7 +211,6 @@ body{
 .cardHead span{ color:var(--muted); font-weight:750; font-size:12px; }
 .cardBody{ padding:14px 16px 16px; }
 
-/* ✅ Quick Actions */
 .actions{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -241,7 +244,6 @@ body{
 .action h4{ margin:0; font-size:14px; font-weight:950; }
 .action p{ margin:6px 0 0; color:var(--muted); font-size:12px; font-weight:750; }
 
-/* ✅ Schedule list */
 .list{ display:flex; flex-direction:column; gap:10px; }
 .item{
   display:flex;
@@ -315,7 +317,11 @@ body{
 
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo"></div>
+      <div class="logo">
+    <img src="<%= request.getContextPath() %>/AllComponents/images/Logo_2.png"
+         alt="Ocean View Resort Logo">
+</div>
+
       <div>
         <h1>Reception Desk</h1>
         <p>Ocean View Resort</p>
@@ -391,7 +397,7 @@ body{
 
     <div class="grid">
 
-      <!-- ✅ QUICK ACTIONS CARD -->
+      
       <section class="card">
         <div class="cardHead"><h3>Quick Actions</h3><span>Fast workflow</span></div>
         <div class="cardBody">
@@ -433,7 +439,7 @@ body{
         </div>
       </section>
 
-      <!-- ✅ TODAY SCHEDULE CARD -->
+      
       <section class="card">
         <div class="cardHead"><h3>Today’s Schedule</h3><span>Arrivals & departures</span></div>
         <div class="cardBody">

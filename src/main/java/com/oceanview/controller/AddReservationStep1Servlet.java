@@ -39,7 +39,6 @@ public class AddReservationStep1Servlet extends HttpServlet {
             ReservationDAO resDAO = new ReservationDAOImpl(conn);
             RoomDAO roomDAO = new RoomDAOImpl(conn);
 
-            // availability check
             if (!resDAO.isRoomAvailable(roomId, checkIn, checkOut)) {
                 resp.sendRedirect(req.getContextPath() + "/staff/addReservationStep1.jsp?error=Room not available for selected dates");
                 return;
@@ -48,12 +47,11 @@ public class AddReservationStep1Servlet extends HttpServlet {
             Room room = roomDAO.getRoomById(roomId);
 
             String reservationId = resDAO.generateReservationId();
-            int baseGuests = Math.max(1, room.getAdultCapacity()); // you can change rule
+            int baseGuests = Math.max(1, room.getAdultCapacity()); 
             double total = BillingCalculator.calculateTotal(
                     room.getRatePerNight(), guests, baseGuests, checkIn, checkOut
             );
 
-            // store step1 in session
             HttpSession session = req.getSession();
             session.setAttribute("step_reservationId", reservationId);
             session.setAttribute("step_roomId", roomId);
