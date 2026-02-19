@@ -161,7 +161,7 @@
         <h2>Edit Room</h2>
         <p>Update room details, status, and manage room images.</p>
       </div>
-      <a class="back-btn" href="<%=request.getContextPath()%>/admin/manageRooms.jsp">← Back</a>
+      <a class="back-btn" href="<%=request.getContextPath()%>/admin/manageRooms.jsp">Back</a>
     </div>
 
     <div class="card">

@@ -305,28 +305,28 @@ small{ color: var(--muted); font-weight:750; }
     <nav class="nav">
       <a href="<%=request.getContextPath()%>/staff/dashboard">
         <div class="left">Dashboard</div>
-        <span class="tag">Home</span>
+       
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp">
         <div class="left">Add Reservation</div>
-        <span class="tag">Create</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/manage-reservations"
          style="border-color: rgba(34,211,238,0.40); background: rgba(34,211,238,0.10);">
         <div class="left">Manage Reservations</div>
-        <span class="tag">Manage</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/room-availability">
         <div class="left">Room Availability</div>
-        <span class="tag">Check</span>
+       
       </a>
       
       <a href="<%=request.getContextPath()%>/staff/help.jsp">
   <div class="left">Help</div>
-  <span class="tag">Support</span>
+
 </a>
       
     </nav>
@@ -351,14 +351,14 @@ small{ color: var(--muted); font-weight:750; }
 
     <% if(successMsg != null){ %>
       <div class="alert success" id="msgBox">
-        <div>✅ <%= successMsg %></div>
+        <div> <%= successMsg %></div>
         <button type="button" onclick="closeMsg()">✕</button>
       </div>
     <% } %>
 
     <% if(error != null){ %>
       <div class="alert error" id="msgBox">
-        <div>❌ <%= error %></div>
+        <div> <%= error %></div>
         <button type="button" onclick="closeMsg()">✕</button>
       </div>
     <% } %>

@@ -10,9 +10,9 @@ public class EmailUtil {
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
 
-    private static final String SMTP_USER = "kasuniik417@gmail.com";
+    private static final String SMTP_USER = " oceanviewresort.booking@gmail.com";
 
-    private static final String SMTP_PASS = "ddikeasiutccrfju";
+    private static final String SMTP_PASS = "ytnugsvyrsgwjhwu";
 
     private static Session buildSession() {
         Properties props = new Properties();
@@ -41,9 +41,9 @@ public class EmailUtil {
             msg.setSubject(subject);
             msg.setText(body);
             Transport.send(msg);
-            System.out.println("✅ Text email sent to " + to);
+            System.out.println(" Text email sent to " + to);
         } catch (Exception e) {
-            System.out.println("❌ Text email sending failed!");
+            System.out.println(" Text email sending failed!");
             e.printStackTrace();
         }
     }
@@ -61,9 +61,9 @@ public class EmailUtil {
             msg.setContent(htmlBody, "text/html; charset=UTF-8");
 
             Transport.send(msg);
-            System.out.println("✅ HTML email sent to " + to);
+            System.out.println(" HTML email sent to " + to);
         } catch (Exception e) {
-            System.out.println("❌ HTML email sending failed!");
+            System.out.println(" HTML email sending failed!");
             e.printStackTrace();
         }
     }

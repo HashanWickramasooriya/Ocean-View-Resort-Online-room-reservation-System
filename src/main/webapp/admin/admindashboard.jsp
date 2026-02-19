@@ -449,7 +449,7 @@ body{
 
         <a class="action-card" href="<%=request.getContextPath()%>/admin/addUser.jsp">
           <div class="action-top">
-            <div class="action-badge">➕</div>
+            
             <div>
               <h4>Add Staff Member</h4>
               <p>Create and manage hotel employees easily</p>
@@ -459,7 +459,7 @@ body{
 
         <a class="action-card" href="<%=request.getContextPath()%>/admin/addRoom.jsp">
           <div class="action-top">
-            <div class="action-badge">🛏</div>
+            
             <div>
               <h4>Add New Room</h4>
               <p>Register rooms with pricing & facilities</p>
@@ -469,7 +469,7 @@ body{
 
         <a class="action-card" href="<%=request.getContextPath()%>/admin/all-reservations">
           <div class="action-top">
-            <div class="action-badge">📋</div>
+           
             <div>
               <h4>View Reservations</h4>
               <p>Track guest bookings and reservation history</p>

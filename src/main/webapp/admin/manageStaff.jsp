@@ -404,7 +404,7 @@ tbody tr:hover td{
         <h2>Manage Staff</h2>
         <p>View, edit and manage all staff accounts</p>
       </div>
-      <a class="add-btn" href="<%=request.getContextPath()%>/admin/addUser.jsp">➕ Add New Staff</a>
+      <a class="add-btn" href="<%=request.getContextPath()%>/admin/addUser.jsp"> Add New Staff</a>
     </div>
 
     <% if (message != null && !message.trim().isEmpty()) { %>

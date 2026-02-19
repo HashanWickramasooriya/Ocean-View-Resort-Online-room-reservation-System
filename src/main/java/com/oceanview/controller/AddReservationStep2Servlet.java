@@ -149,7 +149,7 @@ public class AddReservationStep2Servlet extends HttpServlet {
                         "  <div style='max-width:650px;margin:auto;background:#ffffff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.12);overflow:hidden;'>" +
                         "    <div style='background:linear-gradient(90deg,#003366,#0059b3);padding:18px;color:#fff;text-align:center;'>" +
                         "      <h2 style='margin:0;'>Ocean View Resort</h2>" +
-                        "      <p style='margin:6px 0 0;'>Booking Confirmed ✅</p>" +
+                        "      <p style='margin:6px 0 0;'>Booking Confirmed </p>" +
                         "    </div>" +
                         "    <div style='padding:18px;'>" +
                         "      <p style='margin:0 0 14px;'>Hello <b>" + escapeHtml(g.getGuestName()) + "</b>, your reservation is confirmed.</p>" +

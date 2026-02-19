@@ -36,7 +36,6 @@ public class AddRoomServlet extends HttpServlet {
             throws IOException, ServletException {
 
         try {
-            // SAVE ROOM DETAILS 
             Room room = new Room();
             room.setRoomNumber(req.getParameter("roomNumber"));
             room.setRoomName(req.getParameter("roomName"));

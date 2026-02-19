@@ -379,28 +379,28 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
     <nav class="nav">
       <a href="<%=request.getContextPath()%>/staff/dashboard">
         <div class="left">Dashboard</div>
-        <span class="tag">Home</span>
+       
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp">
         <div class="left">Add Reservation</div>
-        <span class="tag">Create</span>
+      
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/manage-reservations">
         <div class="left">Manage Reservations</div>
-        <span class="tag">Manage</span>
+       
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/room-availability"
          style="border-color: rgba(34,211,238,0.40); background: rgba(34,211,238,0.10);">
         <div class="left">Room Availability</div>
-        <span class="tag">Check</span>
+        
       </a>
       
       <a href="<%=request.getContextPath()%>/staff/help.jsp">
   <div class="left">Help</div>
-  <span class="tag">Support</span>
+  
 </a>
       
     </nav>
@@ -425,7 +425,7 @@ tr:hover td{ background: rgba(34,211,238,0.06); }
 
     <% if(error != null){ %>
       <div class="alert error" id="msgBox">
-        <div>❌ <%= error %></div>
+        <div> <%= error %></div>
         <button type="button" onclick="closeMsg()">✕</button>
       </div>
     <% } %>

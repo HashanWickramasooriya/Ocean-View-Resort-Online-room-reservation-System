@@ -330,7 +330,7 @@ textarea{ resize:vertical; min-height:96px; }
     <nav class="nav">
       <a href="<%=request.getContextPath()%>/staff/dashboard">
         <div class="left">Dashboard</div>
-        <span class="tag">Home</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp"
@@ -341,17 +341,17 @@ textarea{ resize:vertical; min-height:96px; }
 
       <a href="<%=request.getContextPath()%>/staff/manage-reservations">
         <div class="left">Manage Reservations</div>
-        <span class="tag">Manage</span>
+       
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/room-availability">
         <div class="left">Room Availability</div>
-        <span class="tag">Check</span>
+       
       </a>
       
       <a href="<%=request.getContextPath()%>/staff/help.jsp">
   <div class="left">Help</div>
-  <span class="tag">Support</span>
+  
 </a>
       
     </nav>
@@ -378,14 +378,14 @@ textarea{ resize:vertical; min-height:96px; }
 
     <% if(success != null){ %>
       <div class="alert success" id="msgBox">
-        <div>✅ <%= success %></div>
+        <div> <%= success %></div>
         <button type="button" onclick="closeMsg()">✕</button>
       </div>
     <% } %>
 
     <% if(error != null){ %>
       <div class="alert error" id="msgBox">
-        <div>❌ <%= error %></div>
+        <div> <%= error %></div>
         <button type="button" onclick="closeMsg()">✕</button>
       </div>
     <% } %>
@@ -453,13 +453,11 @@ textarea{ resize:vertical; min-height:96px; }
           </div>
 
           <div class="actionsRow">
-            <a class="btnGhost" href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp">← Back</a>
+            <a class="btnGhost" href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp">Back</a>
             <button type="submit" class="btn btnPrimary">Submit Reservation</button>
           </div>
 
-          <div class="smallHint">
-            Tip: Keep contact number format consistent (helps searching later).
-          </div>
+         
 
         </form>
 

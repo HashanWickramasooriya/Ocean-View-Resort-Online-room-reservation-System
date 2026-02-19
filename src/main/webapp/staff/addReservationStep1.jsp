@@ -315,7 +315,7 @@ textarea{ resize:vertical; min-height:92px; }
     <nav class="nav">
       <a href="<%=request.getContextPath()%>/staff/dashboard">
         <div class="left">Dashboard</div>
-        <span class="tag">Home</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp" style="border-color: rgba(34,211,238,0.40); background: rgba(34,211,238,0.10);">
@@ -325,17 +325,17 @@ textarea{ resize:vertical; min-height:92px; }
 
       <a href="<%=request.getContextPath()%>/staff/manage-reservations">
         <div class="left">Manage Reservations</div>
-        <span class="tag">Manage</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/room-availability">
         <div class="left">Room Availability</div>
-        <span class="tag">Check</span>
+      
       </a>
       
       <a href="<%=request.getContextPath()%>/staff/help.jsp">
   <div class="left">Help</div>
-  <span class="tag">Support</span>
+ 
 </a>
       
     </nav>

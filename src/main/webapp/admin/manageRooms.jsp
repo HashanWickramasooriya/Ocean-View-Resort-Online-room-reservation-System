@@ -383,7 +383,7 @@ tbody tr:hover td{
         <p>View, edit and manage all resort rooms</p>
       </div>
 
-      <a class="add-btn" href="<%=request.getContextPath()%>/admin/addRoom.jsp">➕ Add Room</a>
+      <a class="add-btn" href="<%=request.getContextPath()%>/admin/addRoom.jsp"> Add Room</a>
     </div>
 
     <div class="card">

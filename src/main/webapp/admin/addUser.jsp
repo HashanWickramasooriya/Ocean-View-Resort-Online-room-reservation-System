@@ -9,7 +9,7 @@
     }
 
     String message = (String) request.getAttribute("message");
-    String messageType = (String) request.getAttribute("messageType"); // "success" or "error"
+    String messageType = (String) request.getAttribute("messageType"); 
 
     String safeType = "";
     if (messageType != null) {

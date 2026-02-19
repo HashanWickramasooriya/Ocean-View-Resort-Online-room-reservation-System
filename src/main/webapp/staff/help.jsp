@@ -279,28 +279,28 @@ li{ margin:6px 0; color: rgba(234,242,255,0.86); line-height:1.6; }
     <nav class="nav">
       <a href="<%=request.getContextPath()%>/staff/dashboard">
         <div class="left">Dashboard</div>
-        <span class="tag">Home</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp">
         <div class="left">Add Reservation</div>
-        <span class="tag">Create</span>
+      
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/manage-reservations">
         <div class="left">Manage Reservations</div>
-        <span class="tag">Manage</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/room-availability">
         <div class="left">Room Availability</div>
-        <span class="tag">Check</span>
+       
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/help.jsp"
          style="border-color: rgba(34,211,238,0.40); background: rgba(34,211,238,0.10);">
         <div class="left">Help</div>
-        <span class="tag">Support</span>
+     
       </a>
     </nav>
 

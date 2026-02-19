@@ -312,28 +312,28 @@ textarea{ resize:vertical; min-height:96px; }
     <nav class="nav">
       <a href="<%=request.getContextPath()%>/staff/dashboard">
         <div class="left">Dashboard</div>
-        <span class="tag">Home</span>
+       
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp">
         <div class="left">Add Reservation</div>
-        <span class="tag">Create</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/manage-reservations"
          style="border-color: rgba(34,211,238,0.40); background: rgba(34,211,238,0.10);">
         <div class="left">Manage Reservations</div>
-        <span class="tag">Manage</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/room-availability">
         <div class="left">Room Availability</div>
-        <span class="tag">Check</span>
+        
       </a>
       
       <a href="<%=request.getContextPath()%>/staff/help.jsp">
   <div class="left">Help</div>
-  <span class="tag">Support</span>
+  
 </a>
       
     </nav>
@@ -420,7 +420,7 @@ textarea{ resize:vertical; min-height:96px; }
           </div>
 
           <div class="actionsRow">
-            <a class="btnGhost" href="<%=request.getContextPath()%>/staff/manage-reservations">← Back</a>
+            <a class="btnGhost" href="<%=request.getContextPath()%>/staff/manage-reservations"> Back</a>
             <button type="submit" class="btn btnPrimary">Update Reservation</button>
           </div>
         </form>

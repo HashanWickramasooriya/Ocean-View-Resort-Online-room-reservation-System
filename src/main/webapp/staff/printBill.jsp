@@ -326,7 +326,7 @@ tr:last-child td{ border-bottom:none; }
       onclick="window.location.href='<%=request.getContextPath()%>/staff/manage-reservations'">
       ← Back
     </button>
-    <button class="btn btnPrint" type="button" onclick="window.print()">🖨 Print</button>
+    <button class="btn btnPrint" type="button" onclick="window.print()"> Print</button>
   </div>
 
   <section class="paper">

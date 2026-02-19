@@ -332,27 +332,27 @@ body{
       <a href="<%=request.getContextPath()%>/staff/dashboard"
       style="border-color: rgba(34,211,238,0.40); background: rgba(34,211,238,0.10);">
         <div class="left">Dashboard</div>
-        <span class="tag">Home</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/addReservationStep1.jsp">
         <div class="left">Add Reservation</div>
-        <span class="tag">Create</span>
+        
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/manage-reservations">
         <div class="left">Manage Reservations</div>
-        <span class="tag">Manage</span>
+       
       </a>
 
       <a href="<%=request.getContextPath()%>/staff/room-availability">
         <div class="left">Room Availability</div>
-        <span class="tag">Check</span>
+       
       </a>
       
       <a href="<%=request.getContextPath()%>/staff/help.jsp">
   <div class="left">Help</div>
-  <span class="tag">Support</span>
+  
 </a>
       
     </nav>
@@ -496,7 +496,7 @@ body{
               <div class="item">
                 <div>
                   <div class="line1">No arrivals or departures today</div>
-                  <div class="line2">All clear ✅</div>
+                  <div class="line2">All clear </div>
                 </div>
                 <div class="time">Today</div>
               </div>
