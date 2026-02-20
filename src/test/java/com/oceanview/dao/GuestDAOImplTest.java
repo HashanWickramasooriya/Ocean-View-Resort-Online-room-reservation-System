@@ -24,10 +24,10 @@ class GuestDAOImplTest {
     @BeforeAll
     static void setup() throws Exception {
         conn = DBConnection.getConnection();
-        conn.setAutoCommit(false); // transaction mode
+        conn.setAutoCommit(false); 
         guestDAO = new GuestDAOImpl(conn);
 
-        // Generate unique values to avoid UNIQUE constraint errors
+       
         long unique = System.currentTimeMillis();
         guestName = "John Perera";
         contactNumber = "077" + (unique % 10000000);
@@ -36,13 +36,12 @@ class GuestDAOImplTest {
 
     @AfterAll
     static void tearDown() throws Exception {
-        conn.commit();   // save changes permanently
+        conn.commit();  
         conn.close();
     }
 
-    // ---------------------------------------------------
-    // 1️⃣ Create Guest
-    // ---------------------------------------------------
+    // Create Guest
+    
     @Test
     @Order(1)
     void testCreateGuest() {
@@ -53,10 +52,10 @@ class GuestDAOImplTest {
         g.setContactNumber(contactNumber);
         g.setEmail(email);
 
-        // MUST match ENUM exactly from DB
+       
         g.setIdType("NATIONAL_ID");
 
-        // NIC number
+        
         g.setIdNumber("200089786578");
 
         g.setNationality("Sri Lankan");
@@ -67,9 +66,8 @@ class GuestDAOImplTest {
         assertTrue(testGuestId > 0);
     }
 
-    // ---------------------------------------------------
-    // 2️⃣ Get Guest By ID
-    // ---------------------------------------------------
+    //  Get Guest By ID
+    
     @Test
     @Order(2)
     void testGetGuestById() {
@@ -84,9 +82,8 @@ class GuestDAOImplTest {
         assertEquals(email, g.getEmail());
     }
 
-    // ---------------------------------------------------
-    // 3️⃣ Update Guest
-    // ---------------------------------------------------
+    //  Update Guest
+   
     @Test
     @Order(3)
     void testUpdateGuest() {

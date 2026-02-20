@@ -35,7 +35,7 @@ class DeleteRoomServletTest {
         verify(response).sendRedirect("manageRooms.jsp");
     }
 
-    // DELETE FAILURE (Exception Handling)
+    // DELETE FAILURE 
     @Test
     void testDeleteRoomFailure() throws Exception {
 

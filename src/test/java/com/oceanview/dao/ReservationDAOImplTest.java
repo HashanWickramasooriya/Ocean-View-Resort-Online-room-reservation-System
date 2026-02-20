@@ -22,14 +22,13 @@ class ReservationDAOImplTest {
 
     private static String testReservationId;
 
-    // ---------------------------------------------------
     // SETUP
-    // ---------------------------------------------------
+  
     @BeforeAll
     static void setup() throws Exception {
 
         conn = DBConnection.getConnection();
-        conn.setAutoCommit(false); // rollback later
+        conn.setAutoCommit(false); 
         reservationDAO = new ReservationDAOImpl(conn);
 
         TEST_ROOM_ID = insertTestRoom();
@@ -38,13 +37,12 @@ class ReservationDAOImplTest {
 
     @AfterAll
     static void tearDown() throws Exception {
-        conn.commit();   // save changes
+        conn.commit();   
         conn.close();
     }
 
-    // ---------------------------------------------------
     // HELPER METHODS
-    // ---------------------------------------------------
+  
     private static int insertTestRoom() throws Exception {
 
         String sql = """
@@ -83,9 +81,7 @@ class ReservationDAOImplTest {
         }
     }
 
-    // ---------------------------------------------------
-    // 1️⃣ Generate Reservation ID
-    // ---------------------------------------------------
+    // Generate Reservation id
     @Test
     @Order(1)
     void testGenerateReservationId() {
@@ -96,10 +92,8 @@ class ReservationDAOImplTest {
         assertTrue(id.matches("RES-\\d{8}-\\d{3}"));
     }
 
-    // ---------------------------------------------------
-    // 2️⃣ Create Reservation
-    // ---------------------------------------------------
-    @Test
+    //  Create Reservation
+   
     @Order(2)
     void testCreateReservation() {
 
@@ -125,9 +119,8 @@ class ReservationDAOImplTest {
         assertNotNull(saved);
     }
 
-    // ---------------------------------------------------
-    // 3️⃣ Update Reservation
-    // ---------------------------------------------------
+    //  Update Reservation
+   
     @Test
     @Order(3)
     void testUpdateReservation() {
@@ -145,9 +138,8 @@ class ReservationDAOImplTest {
         assertEquals("CONFIRMED", updatedRes.getStatus());
     }
 
-    // ---------------------------------------------------
-    // 4️⃣ Check Room Availability
-    // ---------------------------------------------------
+    //  Check Room Availability
+ 
     @Test
     @Order(4)
     void testRoomAvailability() {
@@ -161,9 +153,8 @@ class ReservationDAOImplTest {
         assertTrue(available);
     }
 
-    // ---------------------------------------------------
-    // 5️⃣ Get All Reservations
-    // ---------------------------------------------------
+    //  Get All Reservations
+   
     @Test
     @Order(5)
     void testGetAllReservations() {
@@ -174,9 +165,8 @@ class ReservationDAOImplTest {
         assertTrue(list.size() > 0);
     }
 
-    // ---------------------------------------------------
-    // 6️⃣ Search Reservations
-    // ---------------------------------------------------
+    //  Search Reservations
+   
     @Test
     @Order(6)
     void testSearchReservations() {
@@ -192,9 +182,8 @@ class ReservationDAOImplTest {
         assertTrue(results.size() > 0);
     }
 
-    // ---------------------------------------------------
-    // 7️⃣ Mark Checked In
-    // ---------------------------------------------------
+    //  Mark Checked In
+   
     @Test
     @Order(7)
     void testMarkCheckedIn() {
@@ -206,9 +195,8 @@ class ReservationDAOImplTest {
         assertEquals("CHECKED_IN", r.getStatus());
     }
 
-    // ---------------------------------------------------
-    // 8️⃣ Mark Checked Out
-    // ---------------------------------------------------
+    // Mark Checked Out
+   
     @Test
     @Order(8)
     void testMarkCheckedOut() {
@@ -220,9 +208,7 @@ class ReservationDAOImplTest {
         assertEquals("CHECKED_OUT", r.getStatus());
     }
 
-    // ---------------------------------------------------
-    // 9️⃣ Cancel Reservation
-    // ---------------------------------------------------
+    //  Cancel Reservation
     @Test
     @Order(9)
     void testCancelReservation() {

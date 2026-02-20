@@ -21,19 +21,17 @@ class RoomDAOTest {
     @BeforeAll
     static void setup() throws SQLException {
         conn = DBConnection.getConnection();
-        conn.setAutoCommit(false);   // important for rollback
+        conn.setAutoCommit(false);   
         roomDAO = new RoomDAOImpl(conn);
     }
 
     @AfterAll
-    static void tearDown() throws SQLException {
-        conn.rollback();  // undo test changes
+    static void tearDown() throws Exception {
+        conn.commit();   
         conn.close();
     }
-
-    // ----------------------------------------
-    // 1️⃣ Add Room Test
-    // ----------------------------------------
+    //Add Room Test
+   
     @Test
     @Order(1)
     void testAddRoom() {
@@ -52,9 +50,8 @@ class RoomDAOTest {
         assertTrue(testRoomId > 0);
     }
 
-    // ----------------------------------------
-    // 2️⃣ Get Room By ID Test
-    // ----------------------------------------
+    // Get Room By ID Test
+   
     @Test
     @Order(2)
     void testGetRoomById() {
@@ -64,9 +61,8 @@ class RoomDAOTest {
         assertEquals("Test Deluxe", room.getRoomName());
     }
 
-    // ----------------------------------------
-    // 3️⃣ Update Room Test
-    // ----------------------------------------
+    //  Update Room Test
+   
     @Test
     @Order(3)
     void testUpdateRoom() {
@@ -81,9 +77,8 @@ class RoomDAOTest {
         assertEquals("Updated Deluxe", updatedRoom.getRoomName());
     }
 
-    // ----------------------------------------
-    // 4️⃣ Get Available Rooms Test
-    // ----------------------------------------
+    
+    
     @Test
     @Order(4)
     void testGetAvailableRooms() {
@@ -98,10 +93,8 @@ class RoomDAOTest {
         assertTrue(rooms.size() > 0);
     }
 
-    // ----------------------------------------
-    // 5️⃣ Delete Room Test
-    // ----------------------------------------
-    @Test
+    // Delete Room Test
+    
     @Order(5)
     void testDeleteRoom() {
         boolean deleted = roomDAO.deleteRoom(testRoomId);

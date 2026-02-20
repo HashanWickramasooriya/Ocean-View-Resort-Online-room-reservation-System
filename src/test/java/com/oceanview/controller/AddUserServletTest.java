@@ -26,7 +26,7 @@ class AddUserServletTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // 1️⃣ ADD NEW STAFF (SUCCESS)
+    //  ADD NEW STAFF 
     @Test
     void testAddNewStaff() throws Exception {
 
@@ -51,7 +51,7 @@ class AddUserServletTest {
         verify(response).sendRedirect(contains("manageStaff.jsp"));
     }
 
-    // 2️⃣ DUPLICATE USERNAME
+    //  DUPLICATE USERNAME
     @Test
     void testDuplicateUsername() throws Exception {
 
@@ -70,7 +70,7 @@ class AddUserServletTest {
         when(request.getParameter("password")).thenReturn("pass");
         when(request.getParameter("role")).thenReturn("STAFF");
 
-        // Duplicate → createUser returns false
+       
         when(userDAO.createUser(any())).thenReturn(false);
 
         when(request.getRequestDispatcher("/admin/addUser.jsp"))
@@ -81,12 +81,12 @@ class AddUserServletTest {
         verify(dispatcher).forward(request, response);
     }
 
-    // 3️⃣ UNAUTHORIZED ACCESS
+    //  UNAUTHORIZED ACCESS
     @Test
     void testUnauthorizedAccess() throws Exception {
 
         User staff = new User();
-        staff.setRole("STAFF"); // Not admin
+        staff.setRole("STAFF"); 
 
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute("user")).thenReturn(staff);

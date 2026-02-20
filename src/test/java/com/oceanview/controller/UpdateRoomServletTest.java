@@ -30,7 +30,7 @@ class UpdateRoomServletTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // 1️⃣ UPDATE ROOM DETAILS
+    //  UPDATE ROOM DETAILS
     @Test
     void testUpdateRoomDetails() throws Exception {
 
@@ -55,7 +55,7 @@ class UpdateRoomServletTest {
         verify(response).sendRedirect("manageRooms.jsp");
     }
 
-    // 2️⃣ ADD ADDITIONAL IMAGES
+    //  ADD ADDITIONAL IMAGES
     @Test
     void testAddAdditionalImages() throws Exception {
 

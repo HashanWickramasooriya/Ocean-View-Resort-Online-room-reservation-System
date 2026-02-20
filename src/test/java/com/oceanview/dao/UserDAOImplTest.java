@@ -34,13 +34,13 @@ public class UserDAOImplTest {
     void setup() throws Exception {
         userDAO = new UserDAOImpl(conn);
 
-        // Clean test users before each test
+        
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate("DELETE FROM users WHERE username LIKE 'test_%'");
         }
     }
 
-    // ✅ 1. CREATE USER
+    // CREATE USER
     @Test
     @Order(1)
     void testCreateUser() {
@@ -59,7 +59,7 @@ public class UserDAOImplTest {
         assertTrue(userDAO.isUsernameExists("test_create"));
     }
 
-    // ✅ 2. LOGIN USER (VALID)
+    // LOGIN USER (VALID)
     @Test
     @Order(2)
     void testLoginValidUser() {
@@ -80,7 +80,7 @@ public class UserDAOImplTest {
         assertEquals("test_login", loggedIn.getUsername());
     }
 
-    // ❌ 3. INVALID LOGIN
+    //INVALID LOGIN
     @Test
     @Order(3)
     void testInvalidLogin() {
@@ -88,7 +88,7 @@ public class UserDAOImplTest {
         assertNull(result);
     }
 
-    // ✅ 4. UPDATE USER
+    //  UPDATE USER
     @Test
     @Order(4)
     void testUpdateUser() {
@@ -119,7 +119,7 @@ public class UserDAOImplTest {
         assertEquals("New Name", updatedUser.getFullName());
     }
 
-    // ✅ 5. DELETE USER
+    // DELETE USER
     @Test
     @Order(5)
     void testDeleteUser() {
@@ -142,7 +142,7 @@ public class UserDAOImplTest {
         assertNull(userDAO.getUserById(created.getUserId()));
     }
 
-    // ✅ 6. USERNAME EXISTS CHECK
+    //  USERNAME EXISTS CHECK
     @Test
     @Order(6)
     void testUsernameExists() {
