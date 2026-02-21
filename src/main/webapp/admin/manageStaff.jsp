@@ -15,7 +15,7 @@
 
     
     String message = (String) session.getAttribute("message");
-    String messageType = (String) session.getAttribute("messageType"); // "success" or "error"
+    String messageType = (String) session.getAttribute("messageType"); 
 
     String safeType = "";
     if (messageType != null) {
@@ -378,17 +378,20 @@ tbody tr:hover td{
 
     <nav class="nav">
       <a href="<%=request.getContextPath()%>/admin/admindashboard.jsp">
-        Dashboard <span class="tag">Home</span>
+        Dashboard 
       </a>
       <a href="<%=request.getContextPath()%>/admin/manageRooms.jsp">
-        Rooms <span class="tag">Manage</span>
+        Rooms 
       </a>
       <a class="active" href="<%=request.getContextPath()%>/admin/manageStaff.jsp">
-        Staff <span class="tag">Users</span>
+        Staff 
       </a>
       <a href="<%=request.getContextPath()%>/admin/all-reservations">
-        Reservations <span class="tag">View</span>
+        Reservations 
       </a>
+      <a href="<%= request.getContextPath() %>/admin/revenue-chart">
+    View Revenue Chart
+</a>
     </nav>
 
     <div class="sidebar-bottom">

@@ -135,17 +135,20 @@
 
     <nav class="nav">
       <a href="<%=request.getContextPath()%>/admin/admindashboard.jsp">
-        Dashboard <span class="tag">Home</span>
+        Dashboard 
       </a>
       <a class="active" href="<%=request.getContextPath()%>/admin/manageRooms.jsp">
-        Rooms <span class="tag">Manage</span>
+        Rooms 
       </a>
       <a href="<%=request.getContextPath()%>/admin/manageStaff.jsp">
-        Staff <span class="tag">Users</span>
+        Staff 
       </a>
       <a href="<%=request.getContextPath()%>/admin/all-reservations">
-        Reservations <span class="tag">View</span>
+        Reservations 
       </a>
+      <a href="<%= request.getContextPath() %>/admin/revenue-chart">
+    View Revenue Chart
+</a>
     </nav>
 
     <div class="sidebar-bottom">

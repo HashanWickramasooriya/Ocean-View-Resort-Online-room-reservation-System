@@ -274,10 +274,13 @@ tbody tr:hover td{
     </div>
 
     <nav class="nav">
-      <a href="<%=request.getContextPath()%>/admin/admindashboard.jsp">Dashboard <span class="tag">Home</span></a>
-      <a href="<%=request.getContextPath()%>/admin/manageRooms.jsp">Rooms <span class="tag">Manage</span></a>
-      <a href="<%=request.getContextPath()%>/admin/manageStaff.jsp">Staff <span class="tag">Users</span></a>
-      <a href="<%=request.getContextPath()%>/admin/all-reservations">Reservations <span class="tag">View</span></a>
+      <a href="<%=request.getContextPath()%>/admin/admindashboard.jsp">Dashboard </a>
+      <a href="<%=request.getContextPath()%>/admin/manageRooms.jsp">Rooms </a>
+      <a href="<%=request.getContextPath()%>/admin/manageStaff.jsp">Staff </a>
+      <a href="<%=request.getContextPath()%>/admin/all-reservations">Reservations </a>
+      <a href="<%= request.getContextPath() %>/admin/revenue-chart">
+    View Revenue Chart
+</a>
     </nav>
 
     <div class="sidebar-bottom">
